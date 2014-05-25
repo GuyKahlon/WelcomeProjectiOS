@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		503D42271932248B004EE93D /* WPUnrecognizedGuestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 503D42261932248B004EE93D /* WPUnrecognizedGuestViewController.m */; };
+		503D429219323FEB004EE93D /* CALayer+XibConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 503D429119323FEB004EE93D /* CALayer+XibConfiguration.m */; };
+		509808F6190CE9640096AF42 /* WPInnovaServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 509808F5190CE9640096AF42 /* WPInnovaServer.m */; };
+		509808F9190CF5EC0096AF42 /* WPFaceDetectionViewControolerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 509808F8190CF5EC0096AF42 /* WPFaceDetectionViewControolerViewController.m */; };
+		509808FD190CFF6D0096AF42 /* squarePNG.png in Resources */ = {isa = PBXBuildFile; fileRef = 509808FC190CFF6D0096AF42 /* squarePNG.png */; };
+		509808FF190D1B020096AF42 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 509808FE190D1B020096AF42 /* CoreImage.framework */; };
+		50980903190D26C50096AF42 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 50980902190D26C50096AF42 /* MBProgressHUD.m */; };
+		50980907190D2FFA0096AF42 /* WPRecognizedGuestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50980906190D2FFA0096AF42 /* WPRecognizedGuestViewController.m */; };
+		5098090B190D3E030096AF42 /* NSObject+Block.m in Sources */ = {isa = PBXBuildFile; fileRef = 5098090A190D3E030096AF42 /* NSObject+Block.m */; };
 		50C5107118E87DD200E93F3B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50C5107018E87DD200E93F3B /* Foundation.framework */; };
 		50C5107318E87DD200E93F3B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50C5107218E87DD200E93F3B /* CoreGraphics.framework */; };
 		50C5107518E87DD200E93F3B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50C5107418E87DD200E93F3B /* UIKit.framework */; };
@@ -21,6 +30,18 @@
 		50C5109218E87DD200E93F3B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50C5107418E87DD200E93F3B /* UIKit.framework */; };
 		50C5109A18E87DD200E93F3B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 50C5109818E87DD200E93F3B /* InfoPlist.strings */; };
 		50C5109C18E87DD200E93F3B /* WelcomeProjectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 50C5109B18E87DD200E93F3B /* WelcomeProjectTests.m */; };
+		50F07354190CDE320041BA84 /* CitiTLV.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 50F07353190CDE320041BA84 /* CitiTLV.jpg */; };
+		50F0736A190CE5520041BA84 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F07358190CE5520041BA84 /* AFHTTPRequestOperation.m */; };
+		50F0736B190CE5520041BA84 /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F0735A190CE5520041BA84 /* AFHTTPRequestOperationManager.m */; };
+		50F0736C190CE5520041BA84 /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F0735C190CE5520041BA84 /* AFHTTPSessionManager.m */; };
+		50F0736D190CE5520041BA84 /* AFNetworkReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F0735F190CE5520041BA84 /* AFNetworkReachabilityManager.m */; };
+		50F0736E190CE5520041BA84 /* AFSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F07361190CE5520041BA84 /* AFSecurityPolicy.m */; };
+		50F0736F190CE5520041BA84 /* AFURLConnectionOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F07363190CE5520041BA84 /* AFURLConnectionOperation.m */; };
+		50F07370190CE5520041BA84 /* AFURLRequestSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F07365190CE5520041BA84 /* AFURLRequestSerialization.m */; };
+		50F07371190CE5520041BA84 /* AFURLResponseSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F07367190CE5520041BA84 /* AFURLResponseSerialization.m */; };
+		50F07372190CE5520041BA84 /* AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F07369190CE5520041BA84 /* AFURLSessionManager.m */; };
+		50F07375190CE6000041BA84 /* WPServerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F07374190CE6000041BA84 /* WPServerManager.m */; };
+		50F29457190D5982008C7E58 /* WPFloatingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F29456190D5982008C7E58 /* WPFloatingView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +55,23 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		503D42251932248B004EE93D /* WPUnrecognizedGuestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WPUnrecognizedGuestViewController.h; sourceTree = "<group>"; };
+		503D42261932248B004EE93D /* WPUnrecognizedGuestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WPUnrecognizedGuestViewController.m; sourceTree = "<group>"; };
+		503D429019323FEB004EE93D /* CALayer+XibConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CALayer+XibConfiguration.h"; path = "Third Party/ConverntionalC/CALayer+XibConfiguration.h"; sourceTree = "<group>"; };
+		503D429119323FEB004EE93D /* CALayer+XibConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CALayer+XibConfiguration.m"; path = "Third Party/ConverntionalC/CALayer+XibConfiguration.m"; sourceTree = "<group>"; };
+		509808ED190CE8400096AF42 /* WPServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WPServer.h; path = Server/WPServer.h; sourceTree = "<group>"; };
+		509808F4190CE9640096AF42 /* WPInnovaServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WPInnovaServer.h; path = Server/WPInnovaServer.h; sourceTree = "<group>"; };
+		509808F5190CE9640096AF42 /* WPInnovaServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WPInnovaServer.m; path = Server/WPInnovaServer.m; sourceTree = "<group>"; };
+		509808F7190CF5EC0096AF42 /* WPFaceDetectionViewControolerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WPFaceDetectionViewControolerViewController.h; path = "Face Detection/WPFaceDetectionViewControolerViewController.h"; sourceTree = "<group>"; };
+		509808F8190CF5EC0096AF42 /* WPFaceDetectionViewControolerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WPFaceDetectionViewControolerViewController.m; path = "Face Detection/WPFaceDetectionViewControolerViewController.m"; sourceTree = "<group>"; };
+		509808FC190CFF6D0096AF42 /* squarePNG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = squarePNG.png; sourceTree = "<group>"; };
+		509808FE190D1B020096AF42 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
+		50980901190D26C50096AF42 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MBProgressHUD.h; path = "Third Party/MBProgressHUD/MBProgressHUD.h"; sourceTree = "<group>"; };
+		50980902190D26C50096AF42 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MBProgressHUD.m; path = "Third Party/MBProgressHUD/MBProgressHUD.m"; sourceTree = "<group>"; };
+		50980905190D2FFA0096AF42 /* WPRecognizedGuestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WPRecognizedGuestViewController.h; sourceTree = "<group>"; };
+		50980906190D2FFA0096AF42 /* WPRecognizedGuestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WPRecognizedGuestViewController.m; sourceTree = "<group>"; };
+		50980909190D3E030096AF42 /* NSObject+Block.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSObject+Block.h"; path = "WelcomeProject/Extensions/Categories/NSObject+Block.h"; sourceTree = "<group>"; };
+		5098090A190D3E030096AF42 /* NSObject+Block.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSObject+Block.m"; path = "WelcomeProject/Extensions/Categories/NSObject+Block.m"; sourceTree = "<group>"; };
 		50C5106D18E87DD200E93F3B /* WelcomeProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WelcomeProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		50C5107018E87DD200E93F3B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		50C5107218E87DD200E93F3B /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -53,6 +91,30 @@
 		50C5109718E87DD200E93F3B /* WelcomeProjectTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "WelcomeProjectTests-Info.plist"; sourceTree = "<group>"; };
 		50C5109918E87DD200E93F3B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		50C5109B18E87DD200E93F3B /* WelcomeProjectTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WelcomeProjectTests.m; sourceTree = "<group>"; };
+		50F07353190CDE320041BA84 /* CitiTLV.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = CitiTLV.jpg; sourceTree = "<group>"; };
+		50F07357190CE5520041BA84 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
+		50F07358190CE5520041BA84 /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperation.m; sourceTree = "<group>"; };
+		50F07359190CE5520041BA84 /* AFHTTPRequestOperationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperationManager.h; sourceTree = "<group>"; };
+		50F0735A190CE5520041BA84 /* AFHTTPRequestOperationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperationManager.m; sourceTree = "<group>"; };
+		50F0735B190CE5520041BA84 /* AFHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPSessionManager.h; sourceTree = "<group>"; };
+		50F0735C190CE5520041BA84 /* AFHTTPSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPSessionManager.m; sourceTree = "<group>"; };
+		50F0735D190CE5520041BA84 /* AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworking.h; sourceTree = "<group>"; };
+		50F0735E190CE5520041BA84 /* AFNetworkReachabilityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworkReachabilityManager.h; sourceTree = "<group>"; };
+		50F0735F190CE5520041BA84 /* AFNetworkReachabilityManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFNetworkReachabilityManager.m; sourceTree = "<group>"; };
+		50F07360190CE5520041BA84 /* AFSecurityPolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFSecurityPolicy.h; sourceTree = "<group>"; };
+		50F07361190CE5520041BA84 /* AFSecurityPolicy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFSecurityPolicy.m; sourceTree = "<group>"; };
+		50F07362190CE5520041BA84 /* AFURLConnectionOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLConnectionOperation.h; sourceTree = "<group>"; };
+		50F07363190CE5520041BA84 /* AFURLConnectionOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLConnectionOperation.m; sourceTree = "<group>"; };
+		50F07364190CE5520041BA84 /* AFURLRequestSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLRequestSerialization.h; sourceTree = "<group>"; };
+		50F07365190CE5520041BA84 /* AFURLRequestSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLRequestSerialization.m; sourceTree = "<group>"; };
+		50F07366190CE5520041BA84 /* AFURLResponseSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLResponseSerialization.h; sourceTree = "<group>"; };
+		50F07367190CE5520041BA84 /* AFURLResponseSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLResponseSerialization.m; sourceTree = "<group>"; };
+		50F07368190CE5520041BA84 /* AFURLSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLSessionManager.h; sourceTree = "<group>"; };
+		50F07369190CE5520041BA84 /* AFURLSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLSessionManager.m; sourceTree = "<group>"; };
+		50F07373190CE6000041BA84 /* WPServerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WPServerManager.h; path = Server/WPServerManager.h; sourceTree = "<group>"; };
+		50F07374190CE6000041BA84 /* WPServerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WPServerManager.m; path = Server/WPServerManager.m; sourceTree = "<group>"; };
+		50F29455190D5982008C7E58 /* WPFloatingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WPFloatingView.h; path = Extensions/UI/WPFloatingView.h; sourceTree = "<group>"; };
+		50F29456190D5982008C7E58 /* WPFloatingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WPFloatingView.m; path = Extensions/UI/WPFloatingView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +122,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				509808FF190D1B020096AF42 /* CoreImage.framework in Frameworks */,
 				50C5107318E87DD200E93F3B /* CoreGraphics.framework in Frameworks */,
 				50C5107518E87DD200E93F3B /* UIKit.framework in Frameworks */,
 				50C5107118E87DD200E93F3B /* Foundation.framework in Frameworks */,
@@ -79,9 +142,48 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		503D422819323D94004EE93D /* ConventionalC */ = {
+			isa = PBXGroup;
+			children = (
+				503D429019323FEB004EE93D /* CALayer+XibConfiguration.h */,
+				503D429119323FEB004EE93D /* CALayer+XibConfiguration.m */,
+			);
+			name = ConventionalC;
+			sourceTree = "<group>";
+		};
+		509808FB190CF6070096AF42 /* Face Detection */ = {
+			isa = PBXGroup;
+			children = (
+				509808F7190CF5EC0096AF42 /* WPFaceDetectionViewControolerViewController.h */,
+				509808F8190CF5EC0096AF42 /* WPFaceDetectionViewControolerViewController.m */,
+			);
+			name = "Face Detection";
+			sourceTree = "<group>";
+		};
+		50980900190D26B60096AF42 /* MBProgress */ = {
+			isa = PBXGroup;
+			children = (
+				50980901190D26C50096AF42 /* MBProgressHUD.h */,
+				50980902190D26C50096AF42 /* MBProgressHUD.m */,
+			);
+			name = MBProgress;
+			sourceTree = "<group>";
+		};
+		50980908190D3D8C0096AF42 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				503D422819323D94004EE93D /* ConventionalC */,
+				50980909190D3E030096AF42 /* NSObject+Block.h */,
+				5098090A190D3E030096AF42 /* NSObject+Block.m */,
+			);
+			name = Categories;
+			sourceTree = "<group>";
+		};
 		50C5106418E87DD200E93F3B = {
 			isa = PBXGroup;
 			children = (
+				50980908190D3D8C0096AF42 /* Categories */,
+				50F07355190CE5290041BA84 /* Third Party */,
 				50C5107618E87DD200E93F3B /* WelcomeProject */,
 				50C5109518E87DD200E93F3B /* WelcomeProjectTests */,
 				50C5106F18E87DD200E93F3B /* Frameworks */,
@@ -101,6 +203,7 @@
 		50C5106F18E87DD200E93F3B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				509808FE190D1B020096AF42 /* CoreImage.framework */,
 				50C5107018E87DD200E93F3B /* Foundation.framework */,
 				50C5107218E87DD200E93F3B /* CoreGraphics.framework */,
 				50C5107418E87DD200E93F3B /* UIKit.framework */,
@@ -112,12 +215,22 @@
 		50C5107618E87DD200E93F3B /* WelcomeProject */ = {
 			isa = PBXGroup;
 			children = (
+				50F07376190CE6090041BA84 /* Server */,
 				50C5107F18E87DD200E93F3B /* WPAppDelegate.h */,
 				50C5108018E87DD200E93F3B /* WPAppDelegate.m */,
-				50C5108218E87DD200E93F3B /* Main.storyboard */,
 				50C5108518E87DD200E93F3B /* WPViewController.h */,
 				50C5108618E87DD200E93F3B /* WPViewController.m */,
+				50980905190D2FFA0096AF42 /* WPRecognizedGuestViewController.h */,
+				50980906190D2FFA0096AF42 /* WPRecognizedGuestViewController.m */,
+				503D42251932248B004EE93D /* WPUnrecognizedGuestViewController.h */,
+				503D42261932248B004EE93D /* WPUnrecognizedGuestViewController.m */,
+				50C5108218E87DD200E93F3B /* Main.storyboard */,
+				509808FC190CFF6D0096AF42 /* squarePNG.png */,
+				50F29455190D5982008C7E58 /* WPFloatingView.h */,
+				50F29456190D5982008C7E58 /* WPFloatingView.m */,
+				509808FB190CF6070096AF42 /* Face Detection */,
 				50C5108818E87DD200E93F3B /* Images.xcassets */,
+				50F07353190CDE320041BA84 /* CitiTLV.jpg */,
 				50C5107718E87DD200E93F3B /* Supporting Files */,
 			);
 			path = WelcomeProject;
@@ -150,6 +263,70 @@
 				50C5109818E87DD200E93F3B /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		50F07355190CE5290041BA84 /* Third Party */ = {
+			isa = PBXGroup;
+			children = (
+				50980900190D26B60096AF42 /* MBProgress */,
+				50F07356190CE5520041BA84 /* AFNetworking */,
+			);
+			name = "Third Party";
+			sourceTree = "<group>";
+		};
+		50F07356190CE5520041BA84 /* AFNetworking */ = {
+			isa = PBXGroup;
+			children = (
+				50F07357190CE5520041BA84 /* AFHTTPRequestOperation.h */,
+				50F07358190CE5520041BA84 /* AFHTTPRequestOperation.m */,
+				50F07359190CE5520041BA84 /* AFHTTPRequestOperationManager.h */,
+				50F0735A190CE5520041BA84 /* AFHTTPRequestOperationManager.m */,
+				50F0735B190CE5520041BA84 /* AFHTTPSessionManager.h */,
+				50F0735C190CE5520041BA84 /* AFHTTPSessionManager.m */,
+				50F0735D190CE5520041BA84 /* AFNetworking.h */,
+				50F0735E190CE5520041BA84 /* AFNetworkReachabilityManager.h */,
+				50F0735F190CE5520041BA84 /* AFNetworkReachabilityManager.m */,
+				50F07360190CE5520041BA84 /* AFSecurityPolicy.h */,
+				50F07361190CE5520041BA84 /* AFSecurityPolicy.m */,
+				50F07362190CE5520041BA84 /* AFURLConnectionOperation.h */,
+				50F07363190CE5520041BA84 /* AFURLConnectionOperation.m */,
+				50F07364190CE5520041BA84 /* AFURLRequestSerialization.h */,
+				50F07365190CE5520041BA84 /* AFURLRequestSerialization.m */,
+				50F07366190CE5520041BA84 /* AFURLResponseSerialization.h */,
+				50F07367190CE5520041BA84 /* AFURLResponseSerialization.m */,
+				50F07368190CE5520041BA84 /* AFURLSessionManager.h */,
+				50F07369190CE5520041BA84 /* AFURLSessionManager.m */,
+			);
+			name = AFNetworking;
+			path = "Third Party/AFNetworking";
+			sourceTree = "<group>";
+		};
+		50F07376190CE6090041BA84 /* Server */ = {
+			isa = PBXGroup;
+			children = (
+				50F07378190CE6260041BA84 /* Server Manager */,
+				50F07377190CE6140041BA84 /* Protocol */,
+				509808F4190CE9640096AF42 /* WPInnovaServer.h */,
+				509808F5190CE9640096AF42 /* WPInnovaServer.m */,
+			);
+			name = Server;
+			sourceTree = "<group>";
+		};
+		50F07377190CE6140041BA84 /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				509808ED190CE8400096AF42 /* WPServer.h */,
+			);
+			name = Protocol;
+			sourceTree = "<group>";
+		};
+		50F07378190CE6260041BA84 /* Server Manager */ = {
+			isa = PBXGroup;
+			children = (
+				50F07373190CE6000041BA84 /* WPServerManager.h */,
+				50F07374190CE6000041BA84 /* WPServerManager.m */,
+			);
+			name = "Server Manager";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -200,6 +377,9 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = GuyKahlon;
 				TargetAttributes = {
+					50C5106C18E87DD200E93F3B = {
+						DevelopmentTeam = 22H23T9UE8;
+					};
 					50C5108D18E87DD200E93F3B = {
 						TestTargetID = 50C5106C18E87DD200E93F3B;
 					};
@@ -230,6 +410,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				50C5108918E87DD200E93F3B /* Images.xcassets in Resources */,
+				50F07354190CDE320041BA84 /* CitiTLV.jpg in Resources */,
+				509808FD190CFF6D0096AF42 /* squarePNG.png in Resources */,
 				50C5107B18E87DD200E93F3B /* InfoPlist.strings in Resources */,
 				50C5108418E87DD200E93F3B /* Main.storyboard in Resources */,
 			);
@@ -250,9 +432,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				50F0736A190CE5520041BA84 /* AFHTTPRequestOperation.m in Sources */,
 				50C5107D18E87DD200E93F3B /* main.m in Sources */,
+				509808F6190CE9640096AF42 /* WPInnovaServer.m in Sources */,
+				50F07375190CE6000041BA84 /* WPServerManager.m in Sources */,
+				50F0736B190CE5520041BA84 /* AFHTTPRequestOperationManager.m in Sources */,
+				503D42271932248B004EE93D /* WPUnrecognizedGuestViewController.m in Sources */,
+				50F0736D190CE5520041BA84 /* AFNetworkReachabilityManager.m in Sources */,
+				503D429219323FEB004EE93D /* CALayer+XibConfiguration.m in Sources */,
+				50F29457190D5982008C7E58 /* WPFloatingView.m in Sources */,
+				50F07371190CE5520041BA84 /* AFURLResponseSerialization.m in Sources */,
+				50F0736F190CE5520041BA84 /* AFURLConnectionOperation.m in Sources */,
+				50F0736E190CE5520041BA84 /* AFSecurityPolicy.m in Sources */,
+				50F0736C190CE5520041BA84 /* AFHTTPSessionManager.m in Sources */,
+				50F07370190CE5520041BA84 /* AFURLRequestSerialization.m in Sources */,
+				5098090B190D3E030096AF42 /* NSObject+Block.m in Sources */,
+				50F07372190CE5520041BA84 /* AFURLSessionManager.m in Sources */,
 				50C5108118E87DD200E93F3B /* WPAppDelegate.m in Sources */,
 				50C5108718E87DD200E93F3B /* WPViewController.m in Sources */,
+				50980907190D2FFA0096AF42 /* WPRecognizedGuestViewController.m in Sources */,
+				509808F9190CF5EC0096AF42 /* WPFaceDetectionViewControolerViewController.m in Sources */,
+				50980903190D26C50096AF42 /* MBProgressHUD.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -379,10 +579,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WelcomeProject/WelcomeProject-Prefix.pch";
 				INFOPLIST_FILE = "WelcomeProject/WelcomeProject-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -392,10 +595,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WelcomeProject/WelcomeProject-Prefix.pch";
 				INFOPLIST_FILE = "WelcomeProject/WelcomeProject-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -459,6 +665,7 @@
 				50C510A118E87DD200E93F3B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		50C510A218E87DD200E93F3B /* Build configuration list for PBXNativeTarget "WelcomeProjectTests" */ = {
 			isa = XCConfigurationList;
@@ -467,6 +674,7 @@
 				50C510A418E87DD200E93F3B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
