@@ -8,6 +8,8 @@
 
 #import "WPUnrecognizedGuestViewController.h"
 #import "WPInnovaServer.h"
+#import "WPSearchHostTableViewController.h"
+
 @interface WPUnrecognizedGuestViewController ()<UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *selectHostsTextField;
 @property (strong, nonatomic) NSArray* hosts;
@@ -33,7 +35,6 @@
     // Do any additional setup after loading the view.
     WPInnovaServer *server = [[WPInnovaServer alloc]init];
     [server getHostsListWithResualBlock:^(NSArray *hosts) {
-        
         self.hosts = hosts;
     }];
     
@@ -98,15 +99,18 @@
     self.selectHostsTextField.text = hostName;
     [self.selectHostsTextField resignFirstResponder];
 }
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    if ([segue.identifier isEqualToString:@"SearchHostSegue"]) {
+        
+        WPSearchHostTableViewController* searchHostViewController = segue.destinationViewController;
+        searchHostViewController.hosts = self.hosts;
+    }
 }
-*/
+
 
 @end

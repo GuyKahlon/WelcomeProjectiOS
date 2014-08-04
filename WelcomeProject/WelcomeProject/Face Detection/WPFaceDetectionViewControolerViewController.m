@@ -24,68 +24,6 @@ static const NSString *AVCaptureStillImageIsCapturingStillImageContext = @"AVCap
 
 static CGFloat DegreesToRadians(CGFloat degrees) {return degrees * M_PI / 180;};
 
-// utility used by newSquareOverlayedImageForFeatures for
-//static CGContextRef CreateCGBitmapContextForSize(CGSize size)
-//{
-//    CGContextRef    context = NULL;
-//    CGColorSpaceRef colorSpace;
-//    int             bitmapBytesPerRow;
-//	
-//    bitmapBytesPerRow = (size.width * 4);
-//	
-//    colorSpace = CGColorSpaceCreateDeviceRGB();
-//    context = CGBitmapContextCreate (NULL,
-//									 size.width,
-//									 size.height,
-//									 8,      // bits per component
-//									 bitmapBytesPerRow,
-//									 colorSpace,
-//									 kCGBitmapByteOrderDefault);
-//	CGContextSetAllowsAntialiasing(context, NO);
-//    CGColorSpaceRelease( colorSpace );
-//    return context;
-//}
-
-#pragma mark-
-
-@interface UIImage (RotationMethods)
-- (UIImage *)imageRotatedByDegrees:(CGFloat)degrees;
-
-@end
-
-@implementation UIImage (RotationMethods)
-
-- (UIImage *)imageRotatedByDegrees:(CGFloat)degrees
-{
-	// calculate the size of the rotated view's containing box for our drawing space
-	UIView *rotatedViewBox = [[UIView alloc] initWithFrame:CGRectMake(0,0,self.size.width, self.size.height)];
-	CGAffineTransform t = CGAffineTransformMakeRotation(DegreesToRadians(degrees));
-	rotatedViewBox.transform = t;
-	CGSize rotatedSize = rotatedViewBox.frame.size;
-	
-	// Create the bitmap context
-	UIGraphicsBeginImageContext(rotatedSize);
-	CGContextRef bitmap = UIGraphicsGetCurrentContext();
-	
-	// Move the origin to the middle of the image so we will rotate and scale around the center.
-	CGContextTranslateCTM(bitmap, rotatedSize.width/2, rotatedSize.height/2);
-	
-	//   // Rotate the image context
-	CGContextRotateCTM(bitmap, DegreesToRadians(degrees));
-	
-	// Now, draw the rotated/scaled image into the context
-	CGContextScaleCTM(bitmap, 1.0, -1.0);
-	CGContextDrawImage(bitmap, CGRectMake(-self.size.width / 2, -self.size.height / 2, self.size.width, self.size.height), [self CGImage]);
-	
-	UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
-	UIGraphicsEndImageContext();
-	return newImage;
-}
-
-@end
-
-#pragma mark-
-
 @interface WPFaceDetectionViewControolerViewController (InternalMethods)
 - (void)setupAVCapture;
 - (void)teardownAVCapture;
@@ -93,6 +31,102 @@ static CGFloat DegreesToRadians(CGFloat degrees) {return degrees * M_PI / 180;};
 @end
 
 @implementation WPFaceDetectionViewControolerViewController
+
+#pragma mark - Life cylce
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self teardownAVCapture];
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+	// Do any additional setup after loading the view, typically from a nib.
+    view = [[UIView alloc]init];
+    
+    backgroundView = [[WPFloatingView alloc]initWithFrame:previewView.bounds];
+    backgroundView.opaque = NO;
+    backgroundView.backgroundColor = [UIColor clearColor];
+    
+    //backgroundView.backgroundColor = [UIColor blackColor];
+    //backgroundView.alpha = 0.7;
+    
+    images = [NSMutableArray array];
+	square = [UIImage imageNamed:@"squarePNG"];
+    
+    [self setupAVCapture];
+    
+    NSDictionary *detectorOptions = [[NSDictionary alloc] initWithObjectsAndKeys:CIDetectorAccuracyLow, CIDetectorAccuracy, nil];
+    faceDetector = [CIDetector detectorOfType:CIDetectorTypeFace context:nil options:detectorOptions];
+    
+    titleLabel.text = @"Ready ?";
+    //numberLabel.text = @"";
+    //numberLabel.frame.size = CGSizeMake(0, 0);
+}
+
+- (void)showAnimation
+{
+    static int number = 1;
+    numberLabel.text = [NSString stringWithFormat:@"%d",number];
+    
+    [UIView animateWithDuration:1.0 animations:^{
+        // Scale down 50%
+        numberLabel.transform = CGAffineTransformScale(numberLabel.transform, 0.5, 0.5);
+    } completion:^(BOOL finished) {
+        
+        [UIView animateWithDuration:1.0 animations:^{
+            // Scale up 50%
+            numberLabel.transform = CGAffineTransformScale(numberLabel.transform, 2, 2);
+            //numberLabel.hidden = YES;
+        } completion:^(BOOL finished) {
+            numberLabel.transform = CGAffineTransformIdentity;
+            if (number != 3) {
+                number ++;
+                [self showAnimation];
+            }
+            else
+            {
+                numberLabel.hidden = YES;
+                [self faceDetection:YES];
+            }
+        }];
+    }];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [self showAnimation];
+    
+    [self performBlock:^{
+        
+        
+        titleLabel.text = @"Set !";
+    } afterDelay:1.0 complitionBlock:^{
+        
+        [self performBlock:^{
+            titleLabel.text = @"smile :)";
+            //            numberLabel.text = @"2";
+            //            numberLabel.hidden = NO;
+            //            [UIView animateWithDuration:1.0 animations:^{
+            //                // Scale down 50%
+            //                numberLabel.transform = CGAffineTransformScale(numberLabel.transform, 0.5, 0.5);
+            //            } completion:^(BOOL finished) {
+            //                [UIView animateWithDuration:1.0 animations:^{
+            //                    // Scale up 50%
+            //                    numberLabel.transform = CGAffineTransformScale(numberLabel.transform, 2, 2);
+            //                    numberLabel.hidden = YES;
+            //                }];
+            //            }];
+            
+        } afterDelay:1.0 complitionBlock:^{
+            
+            [self performBlock:^{
+                //[self faceDetection:YES];
+            } afterDelay:3.0];
+        }];
+    }];
+}
 
 - (void)setupAVCapture
 {
@@ -173,15 +207,15 @@ bail:
 // clean up capture setup
 - (void)teardownAVCapture
 {
-	[stillImageOutput removeObserver:self forKeyPath:@"isCapturingStillImage"];
+	//[stillImageOutput removeObserver:self forKeyPath:@"isCapturingStillImage"];
 	[previewLayer removeFromSuperlayer];
 }
 
 // perform a flash bulb animation using KVO to monitor the value of the capturingStillImage property of the AVCaptureStillImageOutput class
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-	if ( context == (__bridge void *)(AVCaptureStillImageIsCapturingStillImageContext) ) {
-		BOOL isCapturingStillImage = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
+//	if ( context == (__bridge void *)(AVCaptureStillImageIsCapturingStillImageContext) ) {
+//		BOOL isCapturingStillImage = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
 		
 //		if ( isCapturingStillImage )
 //        {
@@ -209,7 +243,7 @@ bail:
 //							 }
 //			 ];
 //		}
-	}
+//	}
 }
 
 // utility routing used during image capture to set up capture orientation
@@ -223,56 +257,6 @@ bail:
 		result = AVCaptureVideoOrientationLandscapeLeft;
 	return result;
 }
-
-//// utility routine to create a new image with the red square overlay with appropriate orientation
-//// and return the new composited image which can be saved to the camera roll
-//- (CGImageRef)newSquareOverlayedImageForFeatures:(NSArray *)features
-//                                       inCGImage:(CGImageRef)backgroundImage
-//                                 withOrientation:(UIDeviceOrientation)orientation
-//                                     frontFacing:(BOOL)isFrontFacing
-//{
-//	CGImageRef returnImage = NULL;
-//	CGRect backgroundImageRect = CGRectMake(0., 0., CGImageGetWidth(backgroundImage), CGImageGetHeight(backgroundImage));
-//	CGContextRef bitmapContext = CreateCGBitmapContextForSize(backgroundImageRect.size);
-//	CGContextClearRect(bitmapContext, backgroundImageRect);
-//	CGContextDrawImage(bitmapContext, backgroundImageRect, backgroundImage);
-//	CGFloat rotationDegrees = 0.;
-//	
-//	switch (orientation) {
-//		case UIDeviceOrientationPortrait:
-//			rotationDegrees = -90.;
-//			break;
-//		case UIDeviceOrientationPortraitUpsideDown:
-//			rotationDegrees = 90.;
-//			break;
-//		case UIDeviceOrientationLandscapeLeft:
-//			if (isFrontFacing) rotationDegrees = 180.;
-//			else rotationDegrees = 0.;
-//			break;
-//		case UIDeviceOrientationLandscapeRight:
-//			if (isFrontFacing) rotationDegrees = 0.;
-//			else rotationDegrees = 180.;
-//			break;
-//		case UIDeviceOrientationFaceUp:
-//		case UIDeviceOrientationFaceDown:
-//		default:
-//			break; // leave the layer in its last known orientation
-//	}
-//	UIImage *rotatedSquareImage = [square imageRotatedByDegrees:rotationDegrees];
-//	
-//    // features found by the face detector
-//	for ( CIFaceFeature *ff in features )
-//    {
-//		CGRect faceRect = [ff bounds];
-//		CGContextDrawImage(bitmapContext, faceRect, [rotatedSquareImage CGImage]);
-//	}
-//	returnImage = CGBitmapContextCreateImage(bitmapContext);
-//	CGContextRelease (bitmapContext);
-//	
-//	return returnImage;
-//}
-
-
 // utility routine to display error aleart if takePicture fails
 - (void)displayErrorOnMainQueue:(NSError *)error withMessage:(NSString *)message
 {
@@ -323,25 +307,45 @@ bail:
               {
                   [self faceDetection:NO];
                   
-                  CVPixelBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(imageDataSampleBuffer);
-                  CFDictionaryRef attachments = CMCopyDictionaryOfAttachments(kCFAllocatorDefault, imageDataSampleBuffer, kCMAttachmentMode_ShouldPropagate);
-                  CIImage *ciImage = [[CIImage alloc] initWithCVPixelBuffer:pixelBuffer
-                                                                    options:(__bridge NSDictionary *)attachments];
-                
-              
-                  CIVector *cropRect =[CIVector vectorWithX:backgroundView.transparentRectangleRect.origin.x + 100
-                                                          Y:backgroundView.transparentRectangleRect.origin.y
-                                                          Z:backgroundView.transparentRectangleRect.size.width * 3
-                                                          W:backgroundView.transparentRectangleRect.size.height * 3];
+                  CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(imageDataSampleBuffer);
+                  CVPixelBufferLockBaseAddress(imageBuffer, 0);
+                  void *baseAddress = CVPixelBufferGetBaseAddressOfPlane(imageBuffer, 0);
+                  size_t bytesPerRow = CVPixelBufferGetBytesPerRow(imageBuffer);
+                  size_t width = CVPixelBufferGetWidth(imageBuffer);
+                  size_t height = CVPixelBufferGetHeight(imageBuffer);
+                  CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+                  CGContextRef context = CGBitmapContextCreate(baseAddress, width, height, 8, bytesPerRow, colorSpace, kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedFirst);
+                  CGImageRef quartzImage = CGBitmapContextCreateImage(context);
                   
-                  CIFilter *cropFilter = [CIFilter filterWithName:@"CICrop"];
+                  CVPixelBufferUnlockBaseAddress(imageBuffer,0);
+                  CGContextRelease(context);
+                  CGColorSpaceRelease(colorSpace);
+                  NSLog(@"%@",quartzImage);
                   
-                  [cropFilter setValue:ciImage forKey:@"inputImage"];
-                  [cropFilter setValue:cropRect forKey:@"inputRectangle"];
+                  UIImage* uiImage = [[UIImage alloc] initWithCGImage:quartzImage];
+                  //NSString * base64 = [self imageBase64String:uiImage];
                   
-                  CIImage *croppedImage = [cropFilter valueForKey:@"outputImage"];
+                 
                   
-                  UIImage *uiImage = [[UIImage alloc] initWithCIImage:croppedImage];
+//                  CVPixelBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(imageDataSampleBuffer);
+//                  CFDictionaryRef attachments = CMCopyDictionaryOfAttachments(kCFAllocatorDefault, imageDataSampleBuffer, kCMAttachmentMode_ShouldPropagate);
+//                  CIImage *ciImage = [[CIImage alloc] initWithCVPixelBuffer:pixelBuffer
+//                                                                    options:(__bridge NSDictionary *)attachments];
+//                
+//                
+//                  CIVector *cropRect =[CIVector vectorWithX:backgroundView.transparentRectangleRect.origin.x + 100
+//                                                          Y:backgroundView.transparentRectangleRect.origin.y
+//                                                          Z:backgroundView.transparentRectangleRect.size.width * 3
+//                                                          W:backgroundView.transparentRectangleRect.size.height * 3];
+//                  
+//                  CIFilter *cropFilter = [CIFilter filterWithName:@"CICrop"];
+//                  
+//                  [cropFilter setValue:ciImage forKey:@"inputImage"];
+//                  [cropFilter setValue:cropRect forKey:@"inputRectangle"];
+//                  
+//                  CIImage *croppedImage = [cropFilter valueForKey:@"outputImage"];
+//                  
+//                  UIImage *uiImage = [[UIImage alloc] initWithCIImage:croppedImage];
                   CGSize imgSize = uiImage.size;
                   
                   
@@ -365,7 +369,7 @@ bail:
                       [self performBlock:^{
                           //[self faceDetection:YES];
                           [self checkIfTheGuestIsRecognized];
-                      } afterDelay:12.0];
+                      } afterDelay:0.0];
                       
                   }
                   else
@@ -399,18 +403,12 @@ bail:
     return scaledImage;
 }
 
-- (UIImage *)imageByCroppingImage:(UIImage *)image toSize:(CGSize)size
+- (NSString *)imageBase64String:(UIImage *)image
 {
-    double x = (image.size.width - size.width) / 2.0;
-    double y = (image.size.height - size.height) / 2.0;
+//    return        [UIImagePNGRepresentation(image) base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+    NSData * data = [UIImagePNGRepresentation(image) base64EncodedDataWithOptions:NSDataBase64Encoding64CharacterLineLength];
+    return [NSString stringWithUTF8String:[data bytes]];
     
-    CGRect cropRect = CGRectMake(x, y, size.height, size.width);
-    CGImageRef imageRef = CGImageCreateWithImageInRect([image CGImage], cropRect);
-    
-    UIImage *cropped = [UIImage imageWithCGImage:imageRef];
-    CGImageRelease(imageRef);
-    
-    return cropped;
 }
 
 // turn on/off face detection
@@ -707,95 +705,6 @@ bail:
 	isUsingFrontFacingCamera = !isUsingFrontFacingCamera;
 }
 
-#pragma mark - View lifecycle
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
-    view = [[UIView alloc]init];
-
-    backgroundView = [[WPFloatingView alloc]initWithFrame:previewView.bounds];
-    backgroundView.opaque = NO;
-    backgroundView.backgroundColor = [UIColor clearColor];
-    
-    //backgroundView.backgroundColor = [UIColor blackColor];
-    //backgroundView.alpha = 0.7;
-    
-    images = [NSMutableArray array];
-	square = [UIImage imageNamed:@"squarePNG"];
-    
-    [self setupAVCapture];
-    
-    NSDictionary *detectorOptions = [[NSDictionary alloc] initWithObjectsAndKeys:CIDetectorAccuracyLow, CIDetectorAccuracy, nil];
-    faceDetector = [CIDetector detectorOfType:CIDetectorTypeFace context:nil options:detectorOptions];
-    
-    titleLabel.text = @"Ready ?";
-    //numberLabel.text = @"";
-    //numberLabel.frame.size = CGSizeMake(0, 0);
-}
-
-- (void)showAnimation
-{
-    static int number = 1;
-    numberLabel.text = [NSString stringWithFormat:@"%d",number];
-    
-    [UIView animateWithDuration:1.0 animations:^{
-        // Scale down 50%
-        numberLabel.transform = CGAffineTransformScale(numberLabel.transform, 0.5, 0.5);
-    } completion:^(BOOL finished) {
-        
-        [UIView animateWithDuration:1.0 animations:^{
-            // Scale up 50%
-            numberLabel.transform = CGAffineTransformScale(numberLabel.transform, 2, 2);
-            //numberLabel.hidden = YES;
-        } completion:^(BOOL finished) {
-            numberLabel.transform = CGAffineTransformIdentity;
-            if (number != 3) {
-                number ++;
-                [self showAnimation];
-            }
-            else
-            {
-                numberLabel.hidden = YES;
-                [self faceDetection:YES];
-            }
-        }];
-    }];
-}
-- (void)viewWillAppear:(BOOL)animated
-{
-    [self showAnimation];
-    
-    [self performBlock:^{
-        
-        
-        titleLabel.text = @"Set !";
-    } afterDelay:1.0 complitionBlock:^{
-        
-        [self performBlock:^{
-                titleLabel.text = @"smile :)";
-//            numberLabel.text = @"2";
-//            numberLabel.hidden = NO;
-//            [UIView animateWithDuration:1.0 animations:^{
-//                // Scale down 50%
-//                numberLabel.transform = CGAffineTransformScale(numberLabel.transform, 0.5, 0.5);
-//            } completion:^(BOOL finished) {
-//                [UIView animateWithDuration:1.0 animations:^{
-//                    // Scale up 50%
-//                    numberLabel.transform = CGAffineTransformScale(numberLabel.transform, 2, 2);
-//                    numberLabel.hidden = YES;
-//                }];
-//            }];
-
-        } afterDelay:1.0 complitionBlock:^{
-            
-            [self performBlock:^{
-                //[self faceDetection:YES];
-            } afterDelay:3.0];
-        }];
-    }];
-}
-
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     // Return YES for supported orientations
@@ -838,46 +747,20 @@ bail:
 	}
 }
 
-
-///
-//- (BOOL)shouldAutorotate {
-//    return YES;
-//}
-//
-//- (NSUInteger)supportedInterfaceOrientations {
-//    
-//    return UIInterfaceOrientationMaskAll;
-//}
-//
-//-(void)viewWillLayoutSubviews{
-//    [super viewWillLayoutSubviews];
-//    
-//    UIDeviceOrientation curDeviceOrientation = [[UIDevice currentDevice] orientation];
-//    //AVCaptureVideoOrientation avcaptureOrientation =
-//    [self avOrientationForDeviceOrientation:curDeviceOrientation];
-//    
-//    UIInterfaceOrientation devOrientation = self.interfaceOrientation;
-//    CGFloat scrollWidth_L = self.view.bounds.size.width;
-//    CGFloat scrollWidth_P = self.view.bounds.size.height;
-//    
-//    if (UIInterfaceOrientationLandscapeLeft == devOrientation || UIInterfaceOrientationLandscapeRight == devOrientation) {
-//        // Code for landscape setup
-//        
-//    } else {
-//        // Code for portrait setup
-//        
-//    }
-//}
-
 - (void)checkIfTheGuestIsRecognized
 {
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     
-    //    WPInnovaServer *server = [[WPInnovaServer alloc]init];
-    //    [server createGuestWithGuest:nil];
-    
     WPInnovaServer *server = [[WPInnovaServer alloc]init];
-    [server searchGuestByPicture:nil resualtBloack:^(BOOL find, NSDictionary *jsonData) {
+    
+    NSMutableArray* imageArray =[NSMutableArray arrayWithCapacity:3];
+
+    for (UIImage * image in images) {
+        NSString *imageBase64 = [self imageBase64String:image];
+        [imageArray addObject:imageBase64];
+    }
+    
+    [server searchGuestByPicture:imageArray resualtBloack:^(BOOL find, NSDictionary *jsonData) {
         
         if (find) {
             guestInfo = jsonData;
@@ -887,7 +770,19 @@ bail:
         {
             [self performSegueWithIdentifier:@"UnrecognizedGuestSegue" sender:self];
         }
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
     }];
+}
+
+#pragma mark - IBaction
+- (IBAction)Unrecognized:(UIButton *)sender {
+
+    [self performSegueWithIdentifier:@"UnrecognizedGuestSegue" sender:self];
+}
+
+- (IBAction)Recognized:(UIButton *)sender {
+
+    [self performSegueWithIdentifier:@"RecognizedGuestSegue" sender:self];
 }
 
 #pragma mark - Navigation
@@ -900,8 +795,6 @@ bail:
         recognizedGuestVC.model = guestInfo;
         [MBProgressHUD hideHUDForView:self.view animated:YES];
     }
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
 }
 
 @end

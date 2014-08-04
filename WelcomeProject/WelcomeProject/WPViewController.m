@@ -150,16 +150,17 @@
                   atPoint:(CGPoint)p
 {
     NSString *ide = (NSString *)identifier;
-    UILabel *label = [self valueForKey:ide];
-    
-    if (label.frame.size.height != 511)
-    {
-        [UIView animateWithDuration:2.0 animations:^{
-            label.frame = CGRectMake(label.frame.origin.x,
-                                     label.frame.origin.y,
-                                     511,
-                                     label.frame.size.height);
-        }];
+    if (ide) {
+        UILabel *label = [self valueForKey:ide];
+        if (label.frame.size.height != 511)
+        {
+            [UIView animateWithDuration:2.0 animations:^{
+                label.frame = CGRectMake(label.frame.origin.x,
+                                         label.frame.origin.y,
+                                         511,
+                                         label.frame.size.height);
+            }];
+        }
     }
     
     NSLog(@"Boundary contact occurred - %@", identifier);

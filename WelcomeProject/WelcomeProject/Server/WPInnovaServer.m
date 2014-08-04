@@ -18,13 +18,66 @@
 {
     if (!_manager)
     {
-        _manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@"http://10.29.33.200/"]];
+        _manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@"http://10.29.96.215/"]];
+//        _manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+//        _manager.requestSerializer  = [AFJSONRequestSerializer serializer];
     }
     return _manager;
 }
 
 - (void)searchGuestByPicture:(NSArray *)arrayImages resualtBloack:(WPServerSearchResualt)resualtBloack;
 {
+    //Return mock not find guest.
+    if (resualtBloack) {
+        resualtBloack(NO,nil);
+    }
+    return ;
+    
+    [self.manager POST:@"guests/search"
+            parameters:@{@"pictures":arrayImages}
+               success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                
+                   NSLog(@"JSON Response: %@", responseObject);
+                   NSDictionary *JSON = (NSDictionary *) responseObject;
+                   id user = JSON[@"guest"];
+                   if ([[user description]isEqualToString:@"{}"])
+                   {
+                       if (resualtBloack) {
+                           resualtBloack(NO,nil);
+                       }
+                   }
+                   else
+                   {
+                       if (resualtBloack) {
+                           resualtBloack(YES,@{@"id":@(597),
+                                               @"firstName":@"Avi",
+                                               @"lastName": @"Cohen",
+                                               @"email":@"avi.cohen@gmail.com",
+                                               @"telephone":@"0500000000",
+                                               @"picId":@(1298)});
+                       }
+                       
+                   }
+                   
+               } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                   
+                   NSLog(@"Error: %@", error);
+               }];
+    
+//    [self createGuestWithGuest:nil];
+//    AFHTTPRequestOperationManager *manager = self.manager;
+//    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+//    
+//    [manager POST:@"guests/search" parameters:nil
+//                    constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+//        [formData appendPartWithFileData:imageData name:@"image" fileName:imageFilename mimeType:@"image/png"];
+//    } success:^(AFHTTPRequestOperation *operation, id responseObject) {
+//        NSString *string = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+//        NSLog(@"Success: %@", string);
+//    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+//        NSLog(@"Error: %@", error);
+//    }];
+    
 //    resualtBloack(YES,@{@"id":@(597),
 //                        @"firstName":@"Avi",
 //                        @"lastName": @"Cohen",
@@ -43,37 +96,6 @@
 //        
 //             NSLog(@"Error: %@", error);
 //    }];
-    
-    [self.manager POST:@"guests/search"
-           parameters:@{}
-              success:^(AFHTTPRequestOperation *operation, id responseObject) {
-
-                  NSLog(@"JSON Response: %@", responseObject);
-                  NSDictionary *JSON = (NSDictionary *) responseObject;
-                  id user = JSON[@"guest"];
-                  if ([[user description]isEqualToString:@"{}"])
-                  {
-                      if (resualtBloack) {
-                            resualtBloack(NO,nil);
-                      }
-                  }
-                  else
-                  {
-                      if (resualtBloack) {
-                          resualtBloack(YES,@{@"id":@(597),
-                                              @"firstName":@"Avi",
-                                              @"lastName": @"Cohen",
-                                              @"email":@"avi.cohen@gmail.com",
-                                              @"telephone":@"0500000000",
-                                              @"picId":@(1298)});
-                      }
-                      
-                  }
-                  
-         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-             
-              NSLog(@"Error: %@", error);
-         }];
 }
 
 - (void)getHostsListWithResualBlock:(WPServerHostsListResualt)resualtBlock;
@@ -117,18 +139,17 @@
 //             
 //             NSLog(@"Error: %@", error);
 //         }];
-    
-    
+
     [self.manager POST:@"guests" parameters:@{@"firstName":@"Guy",
                                               @"lastName": @"Kahlon",
                                               @"email":@"guykahlon@gmail.com",
-                                              @"telephone":@"0509944364"}
+                                              @"phoneNumber":@"0509944364"}
      
           success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
                 NSLog(@"JSON: %@", responseObject);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-              NSLog(@"ssd");
+              NSLog(@"Error: %@", error);
     }];
 }
 @end

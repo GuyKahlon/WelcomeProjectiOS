@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5005E24319697CE200CEAFDF /* WPSearchHostTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5005E24219697CE200CEAFDF /* WPSearchHostTableViewController.m */; };
 		503D42271932248B004EE93D /* WPUnrecognizedGuestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 503D42261932248B004EE93D /* WPUnrecognizedGuestViewController.m */; };
 		503D429219323FEB004EE93D /* CALayer+XibConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 503D429119323FEB004EE93D /* CALayer+XibConfiguration.m */; };
 		509808F6190CE9640096AF42 /* WPInnovaServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 509808F5190CE9640096AF42 /* WPInnovaServer.m */; };
@@ -55,6 +56,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5005E24119697CE200CEAFDF /* WPSearchHostTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WPSearchHostTableViewController.h; sourceTree = "<group>"; };
+		5005E24219697CE200CEAFDF /* WPSearchHostTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WPSearchHostTableViewController.m; sourceTree = "<group>"; };
 		503D42251932248B004EE93D /* WPUnrecognizedGuestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WPUnrecognizedGuestViewController.h; sourceTree = "<group>"; };
 		503D42261932248B004EE93D /* WPUnrecognizedGuestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WPUnrecognizedGuestViewController.m; sourceTree = "<group>"; };
 		503D429019323FEB004EE93D /* CALayer+XibConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CALayer+XibConfiguration.h"; path = "Third Party/ConverntionalC/CALayer+XibConfiguration.h"; sourceTree = "<group>"; };
@@ -224,6 +227,8 @@
 				50980906190D2FFA0096AF42 /* WPRecognizedGuestViewController.m */,
 				503D42251932248B004EE93D /* WPUnrecognizedGuestViewController.h */,
 				503D42261932248B004EE93D /* WPUnrecognizedGuestViewController.m */,
+				5005E24119697CE200CEAFDF /* WPSearchHostTableViewController.h */,
+				5005E24219697CE200CEAFDF /* WPSearchHostTableViewController.m */,
 				50C5108218E87DD200E93F3B /* Main.storyboard */,
 				509808FC190CFF6D0096AF42 /* squarePNG.png */,
 				50F29455190D5982008C7E58 /* WPFloatingView.h */,
@@ -440,6 +445,7 @@
 				503D42271932248B004EE93D /* WPUnrecognizedGuestViewController.m in Sources */,
 				50F0736D190CE5520041BA84 /* AFNetworkReachabilityManager.m in Sources */,
 				503D429219323FEB004EE93D /* CALayer+XibConfiguration.m in Sources */,
+				5005E24319697CE200CEAFDF /* WPSearchHostTableViewController.m in Sources */,
 				50F29457190D5982008C7E58 /* WPFloatingView.m in Sources */,
 				50F07371190CE5520041BA84 /* AFURLResponseSerialization.m in Sources */,
 				50F0736F190CE5520041BA84 /* AFURLConnectionOperation.m in Sources */,
