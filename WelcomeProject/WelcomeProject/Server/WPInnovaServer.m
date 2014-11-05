@@ -18,9 +18,9 @@
 {
     if (!_manager)
     {
-        _manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@"http://10.29.96.215/"]];
-//        _manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-//        _manager.requestSerializer  = [AFJSONRequestSerializer serializer];
+        _manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@"http://10.29.33.26/"]];
+        _manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+        _manager.requestSerializer  = [AFJSONRequestSerializer serializer];
     }
     return _manager;
 }
@@ -28,84 +28,53 @@
 - (void)searchGuestByPicture:(NSArray *)arrayImages resualtBloack:(WPServerSearchResualt)resualtBloack;
 {
     //Return mock not find guest.
-    if (resualtBloack) {
-        resualtBloack(NO,nil);
-    }
-    return ;
-    
+//    if (resualtBloack) {
+//        resualtBloack(NO,nil);
+//    }
+//    return ;
+//    
     [self.manager POST:@"guests/search"
             parameters:@{@"pictures":arrayImages}
                success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 
-                   NSLog(@"JSON Response: %@", responseObject);
-                   NSDictionary *JSON = (NSDictionary *) responseObject;
-                   id user = JSON[@"guest"];
-                   if ([[user description]isEqualToString:@"{}"])
-                   {
-                       if (resualtBloack) {
-                           resualtBloack(NO,nil);
-                       }
-                   }
-                   else
-                   {
-                       if (resualtBloack) {
-                           resualtBloack(YES,@{@"id":@(597),
-                                               @"firstName":@"Avi",
-                                               @"lastName": @"Cohen",
-                                               @"email":@"avi.cohen@gmail.com",
-                                               @"telephone":@"0500000000",
-                                               @"picId":@(1298)});
-                       }
-                       
-                   }
+            
+   NSDictionary *jsonObject = [NSJSONSerialization JSONObjectWithData:responseObject
+                                                              options:NSJSONReadingMutableContainers
+                                                                error:nil];
                    
-               } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                   
-                   NSLog(@"Error: %@", error);
-               }];
-    
-//    [self createGuestWithGuest:nil];
-//    AFHTTPRequestOperationManager *manager = self.manager;
-//    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-//    
-//    [manager POST:@"guests/search" parameters:nil
-//                    constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-//        [formData appendPartWithFileData:imageData name:@"image" fileName:imageFilename mimeType:@"image/png"];
-//    } success:^(AFHTTPRequestOperation *operation, id responseObject) {
-//        NSString *string = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
-//        NSLog(@"Success: %@", string);
-//    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//        NSLog(@"Error: %@", error);
-//    }];
-    
-//    resualtBloack(YES,@{@"id":@(597),
-//                        @"firstName":@"Avi",
-//                        @"lastName": @"Cohen",
-//                        @"email":@"avi.cohen@gmail.com",
-//                        @"telephone":@"0500000000",
-//                        @"picId":@(1298)});
-   
-    
-//    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-//    [manager GET:@"http://10.29.33.200"
-//      parameters:nil
-//         success:^(AFHTTPRequestOperation *operation, id responseObject) {
-//        NSLog(@"JSON: %@", responseObject);
-//         
-//         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//        
-//             NSLog(@"Error: %@", error);
-//    }];
+    id userDetails = jsonObject[@"guest"];
+    if ([[userDetails description]isEqualToString:@"{}"])
+    {
+       if (resualtBloack) {
+           resualtBloack(NO,jsonObject);
+       }
+    }
+    else{
+       if (resualtBloack) {
+           resualtBloack(YES,userDetails);
+       }
+    }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+       
+       NSLog(@"Error: %@", error);
+    }];
 }
 
 - (void)getHostsListWithResualBlock:(WPServerHostsListResualt)resualtBlock;
 {
-  [self.manager GET:@"hosts"
+//    if (resualtBlock) {
+//        resualtBlock(nil);
+//    }
+//    return ;
+    [self.manager GET:@"hosts"
          parameters:nil
             success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 NSLog(@"JSON Response: %@", responseObject);
-                NSDictionary *JSON = (NSDictionary *) responseObject;
-                NSArray *hosts = JSON[@"hosts"];
+                
+                NSDictionary *jsonObject = [NSJSONSerialization JSONObjectWithData:responseObject
+                                                                           options:NSJSONReadingMutableContainers
+                                                                             error:nil];
+                NSArray *hosts = jsonObject[@"hosts"];
                 if (resualtBlock) {
                     resualtBlock(hosts);
                 }
@@ -116,37 +85,44 @@
          }];
 }
 
-- (void)notifyWithHost:(NSObject *)host guest:(NSObject *)guest
+- (void)notifyWithHostId:(NSObject *)hostId guestId:(NSString *)guestId
 {
+    NSString *url = [NSString stringWithFormat:@"/notifications?hostId=%@&guestId=%@",hostId,guestId];
+    
+    [self.manager POST:url
+            parameters:nil
+               success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                   
+                   
+           NSDictionary *jsonObject = [NSJSONSerialization JSONObjectWithData:responseObject
+                                                                      options:NSJSONReadingMutableContainers error:nil];
 
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+           
+           NSLog(@"Error: %@", error);
+        }];
 }
 
-- (void)createGuestWithGuest:(NSObject *)guest
+- (void)createGuestWithGuest:(NSDictionary *)guest hostId:(NSString *)hostId
 {
-//    NSURL *baseURL = [NSURL URLWithString:@"http://10.29.33.200/hosts"];
-//    
-//    AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:baseURL];
-//    manager.responseSerializer = [AFJSONResponseSerializer serializer];
-//    
-//    [manager GET:@""
-//      parameters:nil
-//         success:^(AFHTTPRequestOperation *operation, id responseObject) {
-//             
-//             NSLog(@"JSON: %@", responseObject);
-//             NSLog(@"JSON: %@", responseObject);
-//             
-//         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//             
-//             NSLog(@"Error: %@", error);
-//         }];
-
-    [self.manager POST:@"guests" parameters:@{@"firstName":@"Guy",
-                                              @"lastName": @"Kahlon",
-                                              @"email":@"guykahlon@gmail.com",
-                                              @"phoneNumber":@"0509944364"}
-     
+    [self.manager POST:@"guests"
+            parameters:guest
           success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
+              NSDictionary *jsonObject = [NSJSONSerialization JSONObjectWithData:responseObject
+                                                                         options:NSJSONReadingMutableContainers
+                                                                           error:nil];
+              id userDetails = jsonObject[@"guest"];
+              if ([[userDetails description]isEqualToString:@"{}"] == NO)
+              {
+                  [self notifyWithHostId:hostId guestId:userDetails[@"id"]];
+              }
+              else
+              {
+//                  if (resualtBloack) {
+//                      resualtBloack(YES,userDetails);
+//                  }
+              }
+              
                 NSLog(@"JSON: %@", responseObject);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
               NSLog(@"Error: %@", error);

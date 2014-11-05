@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface WPUnrecognizedGuestViewController : UIViewController
-
+@property (strong, nonatomic)NSString* guestId;
 @end

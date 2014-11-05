@@ -19,9 +19,9 @@ typedef void(^WPServerHostsListResualt)(NSArray *hosts);
 - (void)getHostsListWithResualBlock:(WPServerHostsListResualt)resualtBlock;
 
 //Notify Host
-- (void)notifyWithHost:(NSObject *)host guest:(NSObject *)guest;
+- (void)notifyWithHostId:(NSObject *)hostId guestId:(NSString *)guestId;
 
 
 //Create Guest
-- (void)createGuestWithGuest:(NSObject *)guest;
+- (void)createGuestWithGuest:(NSDictionary *)guest hostId:(NSString *)hostId;
 @end

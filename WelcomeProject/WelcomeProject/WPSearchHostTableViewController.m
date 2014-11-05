@@ -7,9 +7,9 @@
 //
 
 #import "WPSearchHostTableViewController.h"
+#import "WPInnovaServer.h"
 
-@interface WPSearchHostTableViewController ()<UISearchBarDelegate, UISearchDisplayDelegate>
-@property (weak, nonatomic) IBOutlet UISearchBar *hostSearchBar;
+@interface WPSearchHostTableViewController ()<UISearchBarDelegate>
 @property (strong,nonatomic) NSMutableArray *filteredHostsArray;
 @end
 
@@ -29,11 +29,15 @@
     [super viewDidLoad];
     
     if (self.hosts == nil) {
-        self.hosts = @[@{@"firstName": @"Guy", @"lastName" : @"Kahlon"},
-                       @{@"firstName": @"Guy2", @"lastName" : @"Kahlon2"}];
         
+        WPInnovaServer *server = [[WPInnovaServer alloc]init];
+        [server getHostsListWithResualBlock:^(NSArray *hosts) {
+            self.hosts = hosts;
+            self.filteredHostsArray = [self.hosts mutableCopy];
+            [self.tableView reloadData];
+        }];
     }
-    self.filteredHostsArray = [NSMutableArray arrayWithCapacity:[self.hosts count]];
+    self.filteredHostsArray = [self.hosts mutableCopy];
 
     
     // Uncomment the following line to preserve selection between presentations.
@@ -49,15 +53,16 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - IBAction
+- (IBAction)closeButtonAction:(UIButton *)sender
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 #pragma mark - Table view data source
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // Check to see whether the normal table or search results table is being displayed and return the count from the appropriate array
-    if (tableView == self.searchDisplayController.searchResultsTableView) {
-        return [self.filteredHostsArray count];
-    } else {
-        return [self.hosts count];
-    }
+    return [self.filteredHostsArray count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -67,13 +72,8 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"HostCell"];
     }
     
-    NSDictionary *hostDetails = nil;
-    // Check to see whether the normal table or search results table is being displayed and set the Candy object from the appropriate array
-    if (tableView == self.searchDisplayController.searchResultsTableView) {
-        hostDetails = [self.filteredHostsArray objectAtIndex:indexPath.row];
-    } else {
-        hostDetails = [self.hosts objectAtIndex:indexPath.row];
-    }
+    NSDictionary *hostDetails = [self.filteredHostsArray objectAtIndex:indexPath.row];
+   
     
     NSString* hostName = [NSString stringWithFormat:@"%@ %@", hostDetails[@"lastName"], hostDetails[@"firstName"]];
     cell.textLabel.text = hostName;
@@ -81,60 +81,52 @@
     return cell;
 }
 
-
-//- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-//{
-//#warning Incomplete method implementation.
-//    // Return the number of rows in the section.
-//    return 0;
-//}
-
-#pragma mark - UISearchDisplayController Delegate Methods
--(BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
-{
-    // Tells the table data source to reload when text changes
-    [self filterContentForSearchText:searchString scope:
-     [[self.searchDisplayController.searchBar scopeButtonTitles] objectAtIndex:[self.searchDisplayController.searchBar selectedScopeButtonIndex]]];
-    // Return YES to cause the search result table view to be reloaded.
-    return YES;
+#pragma mark - Table view delegate
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{    
+    NSDictionary *hostDetails = [self.filteredHostsArray objectAtIndex:indexPath.row];
+    
+    NSString* hostName = [NSString stringWithFormat:@"%@ %@", hostDetails[@"lastName"], hostDetails[@"firstName"]];
+    NSNumber* hostId = hostDetails[@"id"];
+    
+    [self.delegate searchHostTableViewController:self
+                                 selectedChanged:hostName
+                                  selectedHostId:[hostId stringValue]];
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
--(BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchScope:(NSInteger)searchOption
+#pragma mark - UISearchDisplayController Delegate Methods
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
-    // Tells the table data source to reload when scope bar selection changes
-    [self filterContentForSearchText:self.searchDisplayController.searchBar.text scope:
-     [[self.searchDisplayController.searchBar scopeButtonTitles] objectAtIndex:searchOption]];
-    // Return YES to cause the search result table view to be reloaded.
-    return YES;
+    if ([searchText isEqualToString:@""])
+    {
+        self.filteredHostsArray = [self.hosts mutableCopy];
+    }
+    else
+    {
+        [self filterContentForSearchText:searchText scope:nil];
+    }
+    [self.tableView reloadData];
 }
 
 #pragma mark Content Filtering
 -(void)filterContentForSearchText:(NSString*)searchText scope:(NSString*)scope
 {
-    // Update the filtered array based on the search text and scope.
-    // Remove all objects from the filtered search array
     [self.filteredHostsArray removeAllObjects];
-    // Filter the array using NSPredicate
+    self.filteredHostsArray = [[self.hosts filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NSDictionary *hostDetails, NSDictionary *bindings) {
+        
+        NSString* hostName = [NSString stringWithFormat:@"%@ %@",
+                              hostDetails[@"lastName"], hostDetails[@"firstName"]];
 
-    //Filter First Name
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"firstName contains[c] %@",searchText];
-    self.filteredHostsArray = [NSMutableArray arrayWithArray:[self.hosts filteredArrayUsingPredicate:predicate]];
-    
-    //Filter Last Name
-    predicate = [NSPredicate predicateWithFormat:@"LastName contains[c] %@",searchText];
-    [self.filteredHostsArray addObjectsFromArray:[NSMutableArray arrayWithArray:[self.hosts filteredArrayUsingPredicate:predicate]]];
+        NSString* nameHost = [NSString stringWithFormat:@"%@ %@",
+                              hostDetails[@"firstName"], hostDetails[@"lastName"]];
+        return [hostName rangeOfString:searchText options:NSCaseInsensitiveSearch].location != NSNotFound ||
+               [nameHost rangeOfString:searchText options:NSCaseInsensitiveSearch].location != NSNotFound ;
+    }]]mutableCopy];
 }
 
-/*
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
-    
-    // Configure the cell...
-    
-    return cell;
-}
-*/
+
 
 /*
 // Override to support conditional editing of the table view.

@@ -9,12 +9,18 @@
 #import "WPUnrecognizedGuestViewController.h"
 #import "WPInnovaServer.h"
 #import "WPSearchHostTableViewController.h"
-
-@interface WPUnrecognizedGuestViewController ()<UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate>
+#import <QuartzCore/QuartzCore.h>
+@interface WPUnrecognizedGuestViewController ()<UIPickerViewDelegate, UITextFieldDelegate, WPSearchHostTableViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *selectHostsTextField;
 @property (strong, nonatomic) NSArray* hosts;
 
 @property (strong, nonatomic) IBOutletCollection(UITextField) NSArray *textFieldsCollections;
+@property (weak, nonatomic)UITextField* currentTextField;
+@property (weak, nonatomic) IBOutlet UIButton *notifyButton;
+@property (weak, nonatomic) IBOutlet UITextField *emailTextField;
+
+@property (strong, nonatomic)NSString* hostId;
+
 
 @end
 
@@ -32,20 +38,16 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    WPInnovaServer *server = [[WPInnovaServer alloc]init];
-    [server getHostsListWithResualBlock:^(NSArray *hosts) {
-        self.hosts = hosts;
-    }];
-    
-    
-    UIPickerView *pickerView = [[UIPickerView alloc]init];
-    pickerView.delegate = self;
-    pickerView.dataSource = self;
-    self.selectHostsTextField.inputView = pickerView;
-    
-    UITextField *firstTextField = self.textFieldsCollections.firstObject;
-    [firstTextField becomeFirstResponder];
+    self.currentTextField = self.textFieldsCollections.firstObject;
+    [self.currentTextField becomeFirstResponder];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+//    WPInnovaServer *server = [[WPInnovaServer alloc]init];
+//    [server getHostsListWithResualBlock:^(NSArray *hosts) {
+//        self.hosts = hosts;
+//    }];
 }
 
 - (void)didReceiveMemoryWarning
@@ -54,16 +56,60 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - Private
+-(BOOL) IsValidEmail:(NSString *)emailString Strict:(BOOL)strictFilter
+{
+    NSString *stricterFilterString = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+    NSString *laxString = @".+@.+\\.[A-Za-z]{2}[A-Za-z]*";
+    
+    NSString *emailRegex = strictFilter ? stricterFilterString : laxString;
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    
+    return [emailTest evaluateWithObject:emailString];
+}
+
+#pragma mark - IBAction
+- (IBAction)handleTapGestureRecognizer:(UITapGestureRecognizer *)sender {
+
+    [self.currentTextField resignFirstResponder];
+}
+
+- (IBAction)notifyHostButtonAction:(UIButton *)sender
+{
+    WPInnovaServer *server = [[WPInnovaServer alloc]init];
+    
+    [server createGuestWithGuest:@{@"firstName":@"Guy",
+                                   @"lastName": @"Kahlon",
+                                   @"email":@"guykahlon@gmail.com",
+                                   @"phoneNumber":@"0509944364",
+                                   @"picUrl":self.guestId}
+                          hostId:@"1"];
+    
+
+    [self performSegueWithIdentifier:@"Wating ViewController Segue" sender:self];
+}
+
 #pragma mark - UItextFieldDelegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    
     NSInteger tag = textField.tag + 1;
+    
+    if (textField == self.emailTextField)
+    {
+        if ([self IsValidEmail:textField.text Strict:YES] == NO) {
+            textField.layer.borderColor = [[UIColor redColor]CGColor];
+            textField.layer.borderWidth= 1.0f;
+        }
+        else {
+            [[self.emailTextField layer] setBorderColor:nil];
+            textField.layer.borderWidth= 0.0f;
+        }
+    }
     
     if (tag < self.textFieldsCollections.count)
     {
-        UITextField *firstTextField = self.textFieldsCollections[tag++];
-        [firstTextField becomeFirstResponder];
+        UITextField* currentTextField = self.textFieldsCollections[tag++];
+        [currentTextField becomeFirstResponder];
         return YES;
     }
     else
@@ -72,45 +118,37 @@
         return NO;
     }
 }
-#pragma mark - UIPickerViewDataSource
-// returns the number of 'columns' to display.
-- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
-{
-    return 1;
-}
 
-// returns the # of rows in each component..
-- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
-    return self.hosts.count;
-}
-
-#pragma mark - UIPickerViewDelegate
-- (NSString *)pickerView:(UIPickerView *)pickerView
-             titleForRow:(NSInteger)row
-            forComponent:(NSInteger)component
-{
-    NSString *title = [NSString stringWithFormat:@"%@ %@", self.hosts[row][@"firstName"],self.hosts[row][@"lastName"]];
-    return title;
-}
-- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
-{
-    NSString *hostName = [NSString stringWithFormat:@"%@ %@", self.hosts[row][@"firstName"],self.hosts[row][@"lastName"]];
-    self.selectHostsTextField.text = hostName;
-    [self.selectHostsTextField resignFirstResponder];
+    if (textField == self.selectHostsTextField) {
+        [self.currentTextField resignFirstResponder];
+        [self performSegueWithIdentifier:@"SearchHostSegue" sender:self];
+        return NO;
+    }
+    self.currentTextField = textField;
+    return YES;
 }
 
 #pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([segue.identifier isEqualToString:@"SearchHostSegue"]) {
         
         WPSearchHostTableViewController* searchHostViewController = segue.destinationViewController;
-        searchHostViewController.hosts = self.hosts;
+//        searchHostViewController.hosts = self.hosts;
+        searchHostViewController.delegate = self;
     }
 }
 
+#pragma mark - WPSearchHostTableViewControllerDelegate
+- (void)searchHostTableViewController:(WPSearchHostTableViewController *)sender
+                      selectedChanged:(NSString *)hostName
+                       selectedHostId:(NSString *)hostId{
+    
+    self.selectHostsTextField.text = hostName;
+    self.hostId = hostId;
+    self.notifyButton.enabled = YES;
+}
 
 @end

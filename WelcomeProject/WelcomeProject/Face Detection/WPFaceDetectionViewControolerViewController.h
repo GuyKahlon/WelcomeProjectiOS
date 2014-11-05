@@ -32,14 +32,14 @@
     NSDictionary *guestInfo;
     __weak IBOutlet UILabel *titleLabel;
     __weak IBOutlet UILabel *numberLabel;
-    UIView *view;
     WPFloatingView *backgroundView;
     BOOL isReady;
 }
 
-- (IBAction)takePicture:(id)sender;
+- (IBAction)takePicture;
 - (IBAction)switchCameras:(id)sender;
 - (IBAction)handlePinchGesture:(UIGestureRecognizer *)sender;
 - (IBAction)toggleFaceDetection:(id)sender;
+@property (nonatomic)BOOL automaticTakePictureOnFaceDetection;
 
 @end

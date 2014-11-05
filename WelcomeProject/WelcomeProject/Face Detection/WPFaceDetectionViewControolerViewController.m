@@ -15,118 +15,209 @@
 #import "WPInnovaServer.h"
 #import "WPRecognizedGuestViewController.h"
 #import "NSObject+Block.h"
+#import "FlatButton.h"
+#import "POPSpringAnimation.h"
+#import "POPBasicAnimation.h"
+#import "WPUNRecognizedGuestViewController.h"
+
 
 #define kMaxPictures 3
 #pragma mark-
 
 // used for KVO observation of the @"capturingStillImage" property to perform flash bulb animation
 static const NSString *AVCaptureStillImageIsCapturingStillImageContext = @"AVCaptureStillImageIsCapturingStillImageContext";
-
 static CGFloat DegreesToRadians(CGFloat degrees) {return degrees * M_PI / 180;};
-
 @interface WPFaceDetectionViewControolerViewController (InternalMethods)
 - (void)setupAVCapture;
 - (void)teardownAVCapture;
 - (void)drawFaceBoxesForFeatures:(NSArray *)features forVideoBox:(CGRect)clap orientation:(UIDeviceOrientation)orientation;
 @end
 
+@interface WPFaceDetectionViewControolerViewController()
+@property (weak, nonatomic) IBOutlet FlatButton *snapButton;
+@property (weak, nonatomic) IBOutlet UILabel *errorLabel;
+@property (nonatomic)BOOL detectedFace;
+@property (nonatomic, strong)NSString* guestId;
+@property (nonatomic, strong)NSArray * weloceMessages;
+@end
+
 @implementation WPFaceDetectionViewControolerViewController
+
+#pragma mark - Private methids
+- (void)shakeButton
+{
+    POPSpringAnimation *positionAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerPositionX];
+    positionAnimation.velocity = @2000;
+    positionAnimation.springBounciness = 20;
+    [positionAnimation setCompletionBlock:^(POPAnimation *animation, BOOL finished) {
+        self.snapButton.userInteractionEnabled = YES;
+    }];
+    [self.snapButton.layer pop_addAnimation:positionAnimation forKey:@"positionAnimation"];
+}
+
+- (void)showLabel
+{
+    self.errorLabel.layer.opacity = 1.0;
+    POPSpringAnimation *layerScaleAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerScaleXY];
+    layerScaleAnimation.springBounciness = 18;
+    layerScaleAnimation.toValue = [NSValue valueWithCGSize:CGSizeMake(1.f, 1.f)];
+    [self.errorLabel.layer pop_addAnimation:layerScaleAnimation forKey:@"labelScaleAnimation"];
+    
+    POPSpringAnimation *layerPositionAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerPositionY];
+    layerPositionAnimation.toValue = @(self.snapButton.layer.position.y + self.snapButton.intrinsicContentSize.height);
+    layerPositionAnimation.springBounciness = 12;
+    [self.errorLabel.layer pop_addAnimation:layerPositionAnimation forKey:@"layerPositionAnimation"];
+}
+
+- (void)hideLabel
+{
+    POPBasicAnimation *layerScaleAnimation = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerScaleXY];
+    layerScaleAnimation.toValue = [NSValue valueWithCGSize:CGSizeMake(0.3f, 0.3f)];
+    [self.errorLabel.layer pop_addAnimation:layerScaleAnimation forKey:@"layerScaleAnimation"];
+    
+    POPBasicAnimation *layerPositionAnimation = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerPositionY];
+    layerPositionAnimation.toValue = @(self.snapButton.layer.position.y);
+    [self.errorLabel.layer pop_addAnimation:layerPositionAnimation forKey:@"layerPositionAnimation"];
+    
+    POPBasicAnimation *layerOpacity = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerOpacity];
+    layerOpacity.toValue = @(0);
+    [self.errorLabel.layer pop_addAnimation:layerOpacity forKey:@"layerOpacity"];
+}
+
+- (NSString *)imageBase64String:(UIImage *)image
+{
+    //    return        [UIImagePNGRepresentation(image) base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+    NSData * data = [UIImagePNGRepresentation(image) base64EncodedDataWithOptions:NSDataBase64Encoding64CharacterLineLength];
+    return [NSString stringWithUTF8String:[data bytes]];
+    
+}
+
+#pragma mark - IBACtion
+- (IBAction)snapButtonAction:(FlatButton *)sender
+{
+    [self takePicture];
+}
 
 #pragma mark - Life cylce
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [self teardownAVCapture];
+    //[self teardownAVCapture];
+    
+    [self faceDetection:NO];
+    [images removeAllObjects];
+    
+    for (UIImageView* imageView in imageViews) {
+        imageView.image = nil;
+        imageView.hidden = YES;
+    }
+
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [self faceDetection:YES];
+    
+    //    [self performBlock:^{
+    //
+    //
+    //        titleLabel.text = @"Set !";
+    //    } afterDelay:1.0 complitionBlock:^{
+    //
+    //        [self performBlock:^{
+    //            titleLabel.text = @"smile :)";
+    //            //            numberLabel.text = @"2";
+    //            //            numberLabel.hidden = NO;
+    //            //            [UIView animateWithDuration:1.0 animations:^{
+    //            //                // Scale down 50%
+    //            //                numberLabel.transform = CGAffineTransformScale(numberLabel.transform, 0.5, 0.5);
+    //            //            } completion:^(BOOL finished) {
+    //            //                [UIView animateWithDuration:1.0 animations:^{
+    //            //                    // Scale up 50%
+    //            //                    numberLabel.transform = CGAffineTransformScale(numberLabel.transform, 2, 2);
+    //            //                    numberLabel.hidden = YES;
+    //            //                }];
+    //            //            }];
+    //
+    //        } afterDelay:1.0 complitionBlock:^{
+    //
+    //            [self performBlock:^{
+    //                //[self faceDetection:YES];
+    //            } afterDelay:3.0];
+    //        }];
+    //    }];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
-    view = [[UIView alloc]init];
+    
+    //self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]];
+    
+    self.snapButton.translatesAutoresizingMaskIntoConstraints = NO;
+    self.automaticTakePictureOnFaceDetection = NO;
+    [self hideLabel];
     
     backgroundView = [[WPFloatingView alloc]initWithFrame:previewView.bounds];
     backgroundView.opaque = NO;
     backgroundView.backgroundColor = [UIColor clearColor];
     
-    //backgroundView.backgroundColor = [UIColor blackColor];
-    //backgroundView.alpha = 0.7;
-    
     images = [NSMutableArray array];
-	square = [UIImage imageNamed:@"squarePNG"];
+	//square = [UIImage imageNamed:@"squarePNG"];
     
     [self setupAVCapture];
     
-    NSDictionary *detectorOptions = [[NSDictionary alloc] initWithObjectsAndKeys:CIDetectorAccuracyLow, CIDetectorAccuracy, nil];
-    faceDetector = [CIDetector detectorOfType:CIDetectorTypeFace context:nil options:detectorOptions];
+    faceDetector = [CIDetector detectorOfType:CIDetectorTypeFace
+                                      context:nil
+                                      options:@{CIDetectorAccuracy:CIDetectorAccuracyLow}];
     
-    titleLabel.text = @"Ready ?";
+    //titleLabel.text = @"Ready ?";
     //numberLabel.text = @"";
     //numberLabel.frame.size = CGSizeMake(0, 0);
+  //   UIImageView *imageView = imageViews[images.count - 1];
+    
+    for (UIImageView* imageView in imageViews) {
+        imageView.hidden = YES;
+    }
+    self.snapButton.backgroundColor = [UIColor clearColor];
+    
+    //Hold this iPad in a position to take your photo and hit the camera button
+    self.weloceMessages = @[@"Hi Guest",
+                            @"Please register to Innovation LAB",
+                            @"Hold this iPad in a position to take your photo",
+                            @"And hit the camera button"];
+
+
 }
 
-- (void)showAnimation
-{
-    static int number = 1;
-    numberLabel.text = [NSString stringWithFormat:@"%d",number];
-    
-    [UIView animateWithDuration:1.0 animations:^{
-        // Scale down 50%
-        numberLabel.transform = CGAffineTransformScale(numberLabel.transform, 0.5, 0.5);
-    } completion:^(BOOL finished) {
-        
-        [UIView animateWithDuration:1.0 animations:^{
-            // Scale up 50%
-            numberLabel.transform = CGAffineTransformScale(numberLabel.transform, 2, 2);
-            //numberLabel.hidden = YES;
-        } completion:^(BOOL finished) {
-            numberLabel.transform = CGAffineTransformIdentity;
-            if (number != 3) {
-                number ++;
-                [self showAnimation];
-            }
-            else
-            {
-                numberLabel.hidden = YES;
-                [self faceDetection:YES];
-            }
-        }];
-    }];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [self showAnimation];
-    
-    [self performBlock:^{
-        
-        
-        titleLabel.text = @"Set !";
-    } afterDelay:1.0 complitionBlock:^{
-        
-        [self performBlock:^{
-            titleLabel.text = @"smile :)";
-            //            numberLabel.text = @"2";
-            //            numberLabel.hidden = NO;
-            //            [UIView animateWithDuration:1.0 animations:^{
-            //                // Scale down 50%
-            //                numberLabel.transform = CGAffineTransformScale(numberLabel.transform, 0.5, 0.5);
-            //            } completion:^(BOOL finished) {
-            //                [UIView animateWithDuration:1.0 animations:^{
-            //                    // Scale up 50%
-            //                    numberLabel.transform = CGAffineTransformScale(numberLabel.transform, 2, 2);
-            //                    numberLabel.hidden = YES;
-            //                }];
-            //            }];
-            
-        } afterDelay:1.0 complitionBlock:^{
-            
-            [self performBlock:^{
-                //[self faceDetection:YES];
-            } afterDelay:3.0];
-        }];
-    }];
-}
+//- (void)showAnimation
+//{
+//    static int number = 1;
+//    numberLabel.text = [NSString stringWithFormat:@"%d",number];
+//    
+//    [UIView animateWithDuration:1.0 animations:^{
+//        // Scale down 50%
+//        numberLabel.transform = CGAffineTransformScale(numberLabel.transform, 0.5, 0.5);
+//    } completion:^(BOOL finished) {
+//        
+//        [UIView animateWithDuration:1.0 animations:^{
+//            // Scale up 50%
+//            numberLabel.transform = CGAffineTransformScale(numberLabel.transform, 2, 2);
+//            //numberLabel.hidden = YES;
+//        } completion:^(BOOL finished) {
+//            numberLabel.transform = CGAffineTransformIdentity;
+//            if (number != 3) {
+//                number ++;
+//                [self showAnimation];
+//            }
+//            else
+//            {
+//                numberLabel.hidden = YES;
+//                [self faceDetection:YES];
+//            }
+//        }];
+//    }];
+//}
 
 - (void)setupAVCapture
 {
@@ -148,8 +239,9 @@ static CGFloat DegreesToRadians(CGFloat degrees) {return degrees * M_PI / 180;};
 	//require( error == nil, bail );
 	
     isUsingFrontFacingCamera = NO;
-	if ( [session canAddInput:deviceInput] )
+    if ( [session canAddInput:deviceInput] ){
 		[session addInput:deviceInput];
+    }
     
     // Make a still image output
 	stillImageOutput = [AVCaptureStillImageOutput new];
@@ -174,8 +266,9 @@ static CGFloat DegreesToRadians(CGFloat degrees) {return degrees * M_PI / 180;};
 	videoDataOutputQueue = dispatch_queue_create("VideoDataOutputQueue", DISPATCH_QUEUE_SERIAL);
 	[videoDataOutput setSampleBufferDelegate:self queue:videoDataOutputQueue];
 	
-    if ( [session canAddOutput:videoDataOutput] )
+    if ( [session canAddOutput:videoDataOutput] ){
 		[session addOutput:videoDataOutput];
+    }
 	[[videoDataOutput connectionWithMediaType:AVMediaTypeVideo] setEnabled:NO];
 	
 	effectiveScale = 1.0;
@@ -272,8 +365,155 @@ bail:
 
 // main action method to take a still image -- if face detection has been turned on and a face has been detected
 // the square overlay will be composited on top of the captured image and saved to the camera roll
-- (IBAction)takePicture:(id)sender
+
+- (UIImage *)imageByCroppingImage:(UIImage *)image toSize:(CGSize)size
 {
+    CGRect cropRect = CGRectMake(0, 0, size.height, size.width);
+    CGImageRef imageRef = CGImageCreateWithImageInRect([image CGImage], cropRect);
+    
+    UIImage *cropped = [UIImage imageWithCGImage:imageRef];
+    CGImageRelease(imageRef);
+    
+    return cropped;
+}
+
+- (UIImage *)rotateImage:(UIImage *)image onDegrees:(float)degrees
+{
+    CGFloat rads = M_PI * degrees / 180;
+    float newSide = MAX([image size].width, [image size].height);
+    CGSize size =  CGSizeMake(newSide, newSide);
+    UIGraphicsBeginImageContext(size);
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    CGContextTranslateCTM(ctx, newSide/2, newSide/2);
+    CGContextRotateCTM(ctx, rads);
+    CGContextDrawImage(UIGraphicsGetCurrentContext(),CGRectMake(-[image size].width/2,-[image size].height/2,size.width, size.height),image.CGImage);
+    UIImage *i = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return i;
+}
+
+- (UIImage *)scaleAndRotateImage:(UIImage *)image
+{
+    int kMaxResolution = 1280; // Or whatever
+    
+    CGImageRef imgRef = image.CGImage;
+    
+    CGFloat width = CGImageGetWidth(imgRef);
+    CGFloat height = CGImageGetHeight(imgRef);
+    
+    
+    CGAffineTransform transform = CGAffineTransformIdentity;
+    CGRect bounds = CGRectMake(0, 0, width, height);
+    if (width > kMaxResolution || height > kMaxResolution) {
+        CGFloat ratio = width/height;
+        if (ratio > 1) {
+            bounds.size.width = kMaxResolution;
+            bounds.size.height = roundf(bounds.size.width / ratio);
+        }
+        else {
+            bounds.size.height = kMaxResolution;
+            bounds.size.width = roundf(bounds.size.height * ratio);
+        }
+    }
+    
+    CGFloat scaleRatio = bounds.size.width / width;
+    CGSize imageSize = CGSizeMake(CGImageGetWidth(imgRef), CGImageGetHeight(imgRef));
+    CGFloat boundHeight;
+    UIImageOrientation orient = image.imageOrientation;
+    switch(orient) {
+            
+        case UIImageOrientationUp: //EXIF = 1
+            boundHeight = bounds.size.height;
+            bounds.size.height = bounds.size.width;
+            bounds.size.width = boundHeight;
+            transform = CGAffineTransformMakeTranslation(0.0, imageSize.width);
+            transform = CGAffineTransformRotate(transform, 3.0 * M_PI / 2.0);
+                
+            break;
+            
+        case UIImageOrientationUpMirrored: //EXIF = 2
+            transform = CGAffineTransformMakeTranslation(imageSize.width, 0.0);
+            transform = CGAffineTransformScale(transform, -1.0, 1.0);
+            break;
+            
+        case UIImageOrientationDown: //EXIF = 3
+            transform = CGAffineTransformMakeTranslation(imageSize.width, imageSize.height);
+            transform = CGAffineTransformRotate(transform, M_PI);
+            break;
+            
+        case UIImageOrientationDownMirrored: //EXIF = 4
+            transform = CGAffineTransformMakeTranslation(0.0, imageSize.height);
+            transform = CGAffineTransformScale(transform, 1.0, -1.0);
+            break;
+            
+        case UIImageOrientationLeftMirrored: //EXIF = 5
+            boundHeight = bounds.size.height;
+            bounds.size.height = bounds.size.width;
+            bounds.size.width = boundHeight;
+            transform = CGAffineTransformMakeTranslation(imageSize.height, imageSize.width);
+            transform = CGAffineTransformScale(transform, -1.0, 1.0);
+            transform = CGAffineTransformRotate(transform, 3.0 * M_PI / 2.0);
+            break;
+            
+        case UIImageOrientationLeft: //EXIF = 6
+            boundHeight = bounds.size.height;
+            bounds.size.height = bounds.size.width;
+            bounds.size.width = boundHeight;
+            transform = CGAffineTransformMakeTranslation(0.0, imageSize.width);
+            transform = CGAffineTransformRotate(transform, 3.0 * M_PI / 2.0);
+            break;
+            
+        case UIImageOrientationRightMirrored: //EXIF = 7
+            boundHeight = bounds.size.height;
+            bounds.size.height = bounds.size.width;
+            bounds.size.width = boundHeight;
+            transform = CGAffineTransformMakeScale(-1.0, 1.0);
+            transform = CGAffineTransformRotate(transform, M_PI / 2.0);
+            break;
+            
+        case UIImageOrientationRight: //EXIF = 8
+            boundHeight = bounds.size.height;
+            bounds.size.height = bounds.size.width;
+            bounds.size.width = boundHeight;
+            transform = CGAffineTransformMakeTranslation(imageSize.height, 0.0);
+            transform = CGAffineTransformRotate(transform, M_PI / 2.0);
+            break;
+            
+        default:
+            [NSException raise:NSInternalInconsistencyException format:@"Invalid image orientation"];
+            
+    }
+    
+    UIGraphicsBeginImageContext(bounds.size);
+    
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    if (orient == UIImageOrientationRight || orient == UIImageOrientationLeft ) {
+        CGContextScaleCTM(context, -scaleRatio, scaleRatio);
+        CGContextTranslateCTM(context, -height, 0);
+    }
+    else {
+        CGContextScaleCTM(context, scaleRatio, -scaleRatio);
+        CGContextTranslateCTM(context, 0, -width);
+    }
+    
+    CGContextConcatCTM(context, transform);
+    
+    CGContextDrawImage(UIGraphicsGetCurrentContext(), CGRectMake(0, 0, width, height), imgRef);
+    UIImage *imageCopy = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return imageCopy;
+}
+
+- (void)takePicture
+{
+    if (self.detectedFace == NO) {
+        [self shakeButton];
+        [self showLabel];
+        [self performSelector:@selector(hideLabel) withObject:nil afterDelay:2.5];
+        return;
+    }
     // Find out the current orientation and tell the still image output.
 	AVCaptureConnection *stillImageConnection = [stillImageOutput connectionWithMediaType:AVMediaTypeVideo];
 	UIDeviceOrientation curDeviceOrientation = [[UIDevice currentDevice] orientation];
@@ -285,15 +525,12 @@ bail:
 	
     // set the appropriate pixel format / image type output setting depending on if we'll need an uncompressed image for
     // the possiblity of drawing the red square over top or if we're just writing a jpeg to the camera roll which is the trival case
-        if (doingFaceDetection)
-        {
-            [stillImageOutput setOutputSettings:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:kCMPixelFormat_32BGRA]forKey:(id)kCVPixelBufferPixelFormatTypeKey]];
-        }
-        else
-        {
-            [stillImageOutput setOutputSettings:[NSDictionary dictionaryWithObject:AVVideoCodecJPEG
-																		forKey:AVVideoCodecKey]];
-        }
+    if (doingFaceDetection){
+        stillImageOutput.outputSettings = @{(id)kCVPixelBufferPixelFormatTypeKey:@(kCMPixelFormat_32BGRA)};
+    }
+    else {
+        stillImageOutput.outputSettings = @{AVVideoCodecKey:AVVideoCodecJPEG};
+    }
 	
 	[stillImageOutput captureStillImageAsynchronouslyFromConnection:stillImageConnection
       completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
@@ -303,7 +540,7 @@ bail:
           }
           else
           {
-              if (doingFaceDetection && isReady)
+              if (doingFaceDetection)
               {
                   [self faceDetection:NO];
                   
@@ -317,98 +554,75 @@ bail:
                   CGContextRef context = CGBitmapContextCreate(baseAddress, width, height, 8, bytesPerRow, colorSpace, kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedFirst);
                   CGImageRef quartzImage = CGBitmapContextCreateImage(context);
                   
-                  CVPixelBufferUnlockBaseAddress(imageBuffer,0);
-                  CGContextRelease(context);
-                  CGColorSpaceRelease(colorSpace);
-                  NSLog(@"%@",quartzImage);
                   
                   UIImage* uiImage = [[UIImage alloc] initWithCGImage:quartzImage];
-                  //NSString * base64 = [self imageBase64String:uiImage];
                   
+                  UIImage* imageCopy2 = [self scaleAndRotateImage:uiImage];
+                  CGSize imgSize = imageCopy2.size;
+                  imgSize.height = 960;
+                  imgSize.width = 960;
+                  imageCopy2 = [self imageByCroppingImage:imageCopy2 toSize:imgSize];
+                  
+                  imgSize = uiImage.size;
+                  imgSize.height = 960;
+                  imgSize.width = 960;
+                  
+                  uiImage = [self imageByCroppingImage:uiImage toSize:imgSize];
+
                  
+                  UIImage *scaledImage =[UIImage imageWithCGImage:[uiImage CGImage]
+                                                            scale:(uiImage.scale * 4.0)
+                                                      orientation:(UIImageOrientationRight)];
                   
-//                  CVPixelBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(imageDataSampleBuffer);
-//                  CFDictionaryRef attachments = CMCopyDictionaryOfAttachments(kCFAllocatorDefault, imageDataSampleBuffer, kCMAttachmentMode_ShouldPropagate);
-//                  CIImage *ciImage = [[CIImage alloc] initWithCVPixelBuffer:pixelBuffer
-//                                                                    options:(__bridge NSDictionary *)attachments];
-//                
-//                
-//                  CIVector *cropRect =[CIVector vectorWithX:backgroundView.transparentRectangleRect.origin.x + 100
-//                                                          Y:backgroundView.transparentRectangleRect.origin.y
-//                                                          Z:backgroundView.transparentRectangleRect.size.width * 3
-//                                                          W:backgroundView.transparentRectangleRect.size.height * 3];
-//                  
-//                  CIFilter *cropFilter = [CIFilter filterWithName:@"CICrop"];
-//                  
-//                  [cropFilter setValue:ciImage forKey:@"inputImage"];
-//                  [cropFilter setValue:cropRect forKey:@"inputRectangle"];
-//                  
-//                  CIImage *croppedImage = [cropFilter valueForKey:@"outputImage"];
-//                  
-//                  UIImage *uiImage = [[UIImage alloc] initWithCIImage:croppedImage];
-                  CGSize imgSize = uiImage.size;
-                  
-                  
-                  [images addObject:uiImage];
+                  [images addObject:imageCopy2];
                   
                   UIImageView *imageView = imageViews[images.count - 1];
+                  imageView.image  = scaledImage;
                   
-                  //UIImageView *imageView = imageViews[0];
+                  CGRect frame = imageView.frame;
                   
-                  imageView.contentMode = UIViewContentModeScaleAspectFit;
-                  imageView.image = [self scaleToSize:CGSizeMake(imgSize.width / 3, imgSize.height / 3) image:uiImage];
-                  imageView.frame = CGRectMake(imageView.frame.origin.x,
-                                               imageView.frame.origin.y,
-                                               imgSize.width / 3,
-                                               imgSize.height / 3);
+                  imageView.frame = CGRectMake(250, 300, imageView.frame.size.width, imageView.frame.size.height);
+                  imageView.transform =  CGAffineTransformMakeScale(0.5, 0.5);
+                  imageView.hidden = NO;
+                  //imageView.transform = CGAffineTransformMakeRotation(M_PI/2);
                   
-                  imageView.transform = CGAffineTransformMakeRotation(1.58);
-                  
-                  if (images.count >= kMaxPictures )
-                  {
-                      [self performBlock:^{
-                          //[self faceDetection:YES];
-                          [self checkIfTheGuestIsRecognized];
-                      } afterDelay:0.0];
+                  [UIView animateWithDuration:1.5
+                                        delay:0.0
+                       usingSpringWithDamping:0.6
+                        initialSpringVelocity:6.0
+                                      options:UIViewAnimationOptionLayoutSubviews
+                                   animations:^{
+                                       imageView.frame = frame;
+                                       imageView.transform =  CGAffineTransformMakeScale(1.0, 1.0);
+                                       //imageView.transform = CGAffineTransformMakeRotation(M_PI/2);
+                  } completion:^(BOOL finished) {
                       
-                  }
-                  else
-                  {
-                      [self performBlock:^{
-                          [self faceDetection:YES];
-                      } afterDelay:2.0];
-                  }
+                      if (images.count >= kMaxPictures )
+                      {
+                          [self checkIfTheGuestIsRecognized];
+                          //                      [self performBlock:^{
+                          //                          //[self faceDetection:YES];
+                          //                          [self checkIfTheGuestIsRecognized];
+                          //                      } afterDelay:0.0];
+                      }
+                      else
+                      {
+                          
+//                          [self performBlock:^{
+//                              [self faceDetection:YES];
+//                          } afterDelay:1.0];
+                      }
+                  }];
+                  [self faceDetection:YES];
+               
+              }
+              else
+              {
+                  NSLog(@"asd");
               }
           }
       }
-	 ];
-}
-
--(UIImage*)scaleToSize:(CGSize)size image:(UIImage *)image
-{
-    // Create a bitmap graphics context
-    // This will also set it as the current context
-    UIGraphicsBeginImageContext(size);
-    
-    // Draw the scaled image in the current context
-    [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
-    
-    // Create a new image from current context
-    UIImage* scaledImage = UIGraphicsGetImageFromCurrentImageContext();
-    
-    // Pop the current context from the stack
-    UIGraphicsEndImageContext();
-    
-    // Return our new scaled image
-    return scaledImage;
-}
-
-- (NSString *)imageBase64String:(UIImage *)image
-{
-//    return        [UIImagePNGRepresentation(image) base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
-    NSData * data = [UIImagePNGRepresentation(image) base64EncodedDataWithOptions:NSDataBase64Encoding64CharacterLineLength];
-    return [NSString stringWithUTF8String:[data bytes]];
-    
+    ];
 }
 
 // turn on/off face detection
@@ -432,15 +646,15 @@ bail:
                            [self drawFaceBoxesForFeatures:[NSArray array] forVideoBox:CGRectZero orientation:UIDeviceOrientationPortrait];
                        });
 	}
-    if (detectFace == YES) {
-        [self performBlock:^{
-            isReady = YES;
-        } afterDelay:2.0];
-    }
-    else
-    {
-        isReady = NO;
-    }
+//    if (detectFace == YES) {
+//        [self performBlock:^{
+//            isReady = YES;
+//        } afterDelay:2.0];
+//    }
+//    else
+//    {
+//        isReady = NO;
+//    }
 }
 
 // find where the video box is positioned within the preview layer based on the video size and gravity
@@ -499,9 +713,12 @@ bail:
 	[CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
 	
 	// hide all the face layers
-	for ( CALayer *layer in sublayers ) {
-		if ( [[layer name] isEqualToString:@"FaceLayer"] )
+	for ( CALayer *layer in sublayers )
+    {
+        if ( [[layer name] isEqualToString:@"FaceLayer"] ){
 			[layer setHidden:YES];
+            self.detectedFace = NO;
+        }
 	}
 	
 	if ( featuresCount == 0 || !detectFaces ) {
@@ -516,9 +733,12 @@ bail:
 	CGRect previewBox = [WPFaceDetectionViewControolerViewController videoPreviewBoxForGravity:gravity
                                                                                      frameSize:parentFrameSize
                                                                                   apertureSize:clap.size];
-	for ( CIFaceFeature *ff in features ) {
+	for (CIFaceFeature *ff in features ) {
 		
-        [self takePicture:nil];
+        if (self.automaticTakePictureOnFaceDetection) {
+            [self takePicture];
+        }
+
         // find the correct position for the square layer within the previewLayer
 		// the feature box originates in the bottom left of the video frame.
 		// (Bottom right if mirroring is turned on)
@@ -549,9 +769,11 @@ bail:
 		// re-use an existing layer if possible
 		while ( !featureLayer && (currentSublayer < sublayersCount) ) {
 			CALayer *currentLayer = [sublayers objectAtIndex:currentSublayer++];
-			if ( [[currentLayer name] isEqualToString:@"FaceLayer"] ) {
+			if ( [[currentLayer name] isEqualToString:@"FaceLayer"] )
+            {
 				featureLayer = currentLayer;
 				[currentLayer setHidden:NO];
+                self.detectedFace = YES;
 			}
 		}
 		
@@ -747,34 +969,8 @@ bail:
 	}
 }
 
-- (void)checkIfTheGuestIsRecognized
-{
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    
-    WPInnovaServer *server = [[WPInnovaServer alloc]init];
-    
-    NSMutableArray* imageArray =[NSMutableArray arrayWithCapacity:3];
 
-    for (UIImage * image in images) {
-        NSString *imageBase64 = [self imageBase64String:image];
-        [imageArray addObject:imageBase64];
-    }
-    
-    [server searchGuestByPicture:imageArray resualtBloack:^(BOOL find, NSDictionary *jsonData) {
-        
-        if (find) {
-            guestInfo = jsonData;
-            [self performSegueWithIdentifier:@"RecognizedGuestSegue" sender:self];
-        }
-        else
-        {
-            [self performSegueWithIdentifier:@"UnrecognizedGuestSegue" sender:self];
-        }
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-    }];
-}
-
-#pragma mark - IBaction
+#pragma mark - IBaction (MOCK)
 - (IBAction)Unrecognized:(UIButton *)sender {
 
     [self performSegueWithIdentifier:@"UnrecognizedGuestSegue" sender:self];
@@ -795,6 +991,46 @@ bail:
         recognizedGuestVC.model = guestInfo;
         [MBProgressHUD hideHUDForView:self.view animated:YES];
     }
+    else if ([segue.identifier isEqualToString:@"UnrecognizedGuestSegue"]) {
+        
+        WPUnrecognizedGuestViewController *unrecognizedGuestVC = segue.destinationViewController;
+        unrecognizedGuestVC.guestId = self.guestId;
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+    }
+}
+
+#pragma mark  - Server
+- (void)checkIfTheGuestIsRecognized
+{
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    
+    WPInnovaServer *server = [[WPInnovaServer alloc]init];
+    
+    NSMutableArray* imageArray =[NSMutableArray arrayWithCapacity:3];
+    
+    for (UIImage * image in images) {
+        
+        UIImage *scaledImage = [UIImage imageWithCGImage:[image CGImage]
+                                                   scale:(image.scale * 1.0)
+                                             orientation:(UIImageOrientationRight)];
+        
+        NSString *imageBase64 = [self imageBase64String:scaledImage];
+        [imageArray addObject:imageBase64];
+    }
+    
+    [server searchGuestByPicture:imageArray resualtBloack:^(BOOL find, NSDictionary *jsonData) {
+        
+        if (find) {
+            guestInfo = jsonData;
+            [self performSegueWithIdentifier:@"RecognizedGuestSegue" sender:self];
+        }
+        else
+        {
+            self.guestId = jsonData[@"picUrl"];
+            [self performSegueWithIdentifier:@"UnrecognizedGuestSegue" sender:self];
+        }
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+    }];
 }
 
 @end

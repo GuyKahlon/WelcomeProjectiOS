@@ -7,12 +7,21 @@
 //
 
 #import "WPRecognizedGuestViewController.h"
+#import "WPSearchHostTableViewController.h"
+#import "WPInnovaServer.h"
 
-@interface WPRecognizedGuestViewController ()
+@interface WPRecognizedGuestViewController ()<WPSearchHostTableViewControllerDelegate,UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *firstNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *lastNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *emailLabel;
 @property (weak, nonatomic) IBOutlet UILabel *telephoneLabel;
+@property (weak, nonatomic) IBOutlet UITextField *selectHostsTextField;
+@property (strong, nonatomic) NSArray* hosts;
+@property (weak, nonatomic) IBOutlet UIButton *notifyButton;
+
+
+@property (strong, nonatomic)NSString* hostId;
+@property (strong, nonatomic)NSString* guestId;
 
 @end
 
@@ -31,20 +40,23 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
-//    resualtBloack(YES,@{@"id":@(597),
-//                        @"firstName":@"Avi",
-//                        @"lastName": @"Cohen",
-//                        @"email":@"avi.cohen@gmail.com",
-//                        @"telephone":@"0500000000",
-//                        @"picId":@(1298)});
     if (self.model)
     {
         self.firstNameLabel.text = self.model[@"firstName"];
         self.lastNameLabel.text = self.model[@"lastName"];
         self.emailLabel.text = self.model[@"email"];
-        self.telephoneLabel.text = self.model[@"telephone"];
+        self.telephoneLabel.text = self.model[@"phoneNumber"];
+        //self.model[@"picUrl"];
+        self.guestId = self.model[@"id"];
     }
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    WPInnovaServer *server = [[WPInnovaServer alloc]init];
+    [server getHostsListWithResualBlock:^(NSArray *hosts) {
+        self.hosts = hosts;
+    }];
 }
 
 - (void)didReceiveMemoryWarning
@@ -53,15 +65,52 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - IBAction
+- (IBAction)notifyButtonAction:(UIButton *)sender
+{
+    //[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    
+    WPInnovaServer *server = [[WPInnovaServer alloc]init];
+    
+    [server notifyWithHostId:self.hostId guestId:self.guestId];
+    
+    [self performSegueWithIdentifier:@"Wating ViewController Segue" sender:self];
+}
+
+#pragma mark - UItextFieldDelegate
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+    if (textField == self.selectHostsTextField) {
+        [self performSegueWithIdentifier:@"SearchHostSegue" sender:self];
+        return NO;
+    }
+    return YES;
+}
 
 #pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    if ([segue.identifier isEqualToString:@"SearchHostSegue"]) {
+        
+        WPSearchHostTableViewController* searchHostViewController = segue.destinationViewController;
+        searchHostViewController.hosts = self.hosts;
+        searchHostViewController.delegate = self;
+    }
 }
+
+#pragma mark - WPSearchHostTableViewControllerDelegate
+- (void)searchHostTableViewController:(WPSearchHostTableViewController *)sender
+                      selectedChanged:(NSString *)hostName
+                       selectedHostId:(NSString *)hostId{
+    
+    self.selectHostsTextField.text = hostName;
+    if (hostName.length > 0) {
+        self.notifyButton.enabled = YES;
+    }
+    self.hostId = hostId;
+}
+
+
 
 
 @end
