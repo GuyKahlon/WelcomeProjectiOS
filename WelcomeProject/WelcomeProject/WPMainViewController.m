@@ -23,11 +23,13 @@
 
 @implementation WPMainViewController
 
+#pragma mark - Life cycle
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 }
 
+#pragma mark - Private methods
 - (void)moveToCamera
 {
     WPAppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
@@ -41,6 +43,7 @@
     [self performSegueWithIdentifier:@"main" sender:self];
 }
 
+#pragma mark- UITextViewDelegate
 - (BOOL)textFieldShouldClear:(UITextField *)textField{
     
     self.sighnInButton.enabled = NO;
@@ -58,6 +61,7 @@
     return YES;
 }
 
+#pragma mark - IBAction
 - (IBAction)sighnInButtonAction:(UIButton *)sender{
     
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];

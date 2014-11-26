@@ -14,10 +14,12 @@
 @property (weak, nonatomic) IBOutlet UIButton *playButton;
 @property (strong, nonatomic)UIWebView* videoView;
 @property (nonatomic, strong)NSArray * waitingMessages;
+@property (nonatomic, strong)NSTimer* timer;
 @end
 
 @implementation WPWatingViewController
 
+#pragma mark - Life cycle
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -40,10 +42,19 @@
     imageView.center = self.view.center;
     [self.view addSubview:imageView];
     [self.view bringSubviewToFront:self.playButton];
+    
+    self.timer =  [NSTimer scheduledTimerWithTimeInterval:2.0
+                                                   target:self
+                                                 selector:@selector(goToMainViewController)
+                                                 userInfo:nil
+                                                  repeats:NO];
 }
 
-- (IBAction)buttonPressed:(id)sender
-{
+#pragma mark - IBAction
+- (IBAction)buttonPressed:(id)sender{
+    
+    [self.timer invalidate];
+    
     NSURL *url = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"CitiInnovationLabTLV" ofType:@"mov"]];
     MPMoviePlayerViewController *playercontroller = [[MPMoviePlayerViewController alloc] initWithContentURL:url];
     [self presentMoviePlayerViewControllerAnimated:playercontroller];
@@ -51,10 +62,12 @@
     [playercontroller.moviePlayer play];
 }
 
-- (IBAction)closeButtonAction:(UIButton *)sender
-{
+- (IBAction)closeButtonAction:(UIButton *)sender{
+    [self goToMainViewController];
+}
+
+- (void)goToMainViewController{
     UIViewController* mainViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"MainViewController"];
     [self presentViewController:mainViewController animated:YES completion:nil];
 }
-
 @end

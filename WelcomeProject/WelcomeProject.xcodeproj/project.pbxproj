@@ -47,11 +47,6 @@
 		50C5108418E87DD200E93F3B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50C5108218E87DD200E93F3B /* Main.storyboard */; };
 		50C5108718E87DD200E93F3B /* WPMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50C5108618E87DD200E93F3B /* WPMainViewController.m */; };
 		50C5108918E87DD200E93F3B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 50C5108818E87DD200E93F3B /* Images.xcassets */; };
-		50C5109018E87DD200E93F3B /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50C5108F18E87DD200E93F3B /* XCTest.framework */; };
-		50C5109118E87DD200E93F3B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50C5107018E87DD200E93F3B /* Foundation.framework */; };
-		50C5109218E87DD200E93F3B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50C5107418E87DD200E93F3B /* UIKit.framework */; };
-		50C5109A18E87DD200E93F3B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 50C5109818E87DD200E93F3B /* InfoPlist.strings */; };
-		50C5109C18E87DD200E93F3B /* WelcomeProjectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 50C5109B18E87DD200E93F3B /* WelcomeProjectTests.m */; };
 		50D79FFB19C1E0B90006C043 /* CitiInnovationLabTLV.mov in Resources */ = {isa = PBXBuildFile; fileRef = 50D79FFA19C1E0B90006C043 /* CitiInnovationLabTLV.mov */; };
 		50F0736A190CE5520041BA84 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F07358190CE5520041BA84 /* AFHTTPRequestOperation.m */; };
 		50F0736B190CE5520041BA84 /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F0735A190CE5520041BA84 /* AFHTTPRequestOperationManager.m */; };
@@ -64,16 +59,6 @@
 		50F07372190CE5520041BA84 /* AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F07369190CE5520041BA84 /* AFURLSessionManager.m */; };
 		50F29457190D5982008C7E58 /* WPFloatingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F29456190D5982008C7E58 /* WPFloatingView.m */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		50C5109318E87DD200E93F3B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 50C5106518E87DD200E93F3B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 50C5106C18E87DD200E93F3B;
-			remoteInfo = WelcomeProject;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		5005E24119697CE200CEAFDF /* WPSearchHostTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WPSearchHostTableViewController.h; sourceTree = "<group>"; };
@@ -165,11 +150,7 @@
 		50C5108518E87DD200E93F3B /* WPMainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WPMainViewController.h; sourceTree = "<group>"; };
 		50C5108618E87DD200E93F3B /* WPMainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WPMainViewController.m; sourceTree = "<group>"; };
 		50C5108818E87DD200E93F3B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		50C5108E18E87DD200E93F3B /* WelcomeProjectTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WelcomeProjectTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		50C5108F18E87DD200E93F3B /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		50C5109718E87DD200E93F3B /* WelcomeProjectTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "WelcomeProjectTests-Info.plist"; sourceTree = "<group>"; };
-		50C5109918E87DD200E93F3B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		50C5109B18E87DD200E93F3B /* WelcomeProjectTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WelcomeProjectTests.m; sourceTree = "<group>"; };
 		50D79FFA19C1E0B90006C043 /* CitiInnovationLabTLV.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; name = CitiInnovationLabTLV.mov; path = ../CitiInnovationLabTLV.mov; sourceTree = "<group>"; };
 		50F07357190CE5520041BA84 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
 		50F07358190CE5520041BA84 /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperation.m; sourceTree = "<group>"; };
@@ -203,16 +184,6 @@
 				50C5107318E87DD200E93F3B /* CoreGraphics.framework in Frameworks */,
 				50C5107518E87DD200E93F3B /* UIKit.framework in Frameworks */,
 				50C5107118E87DD200E93F3B /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		50C5108B18E87DD200E93F3B /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				50C5109018E87DD200E93F3B /* XCTest.framework in Frameworks */,
-				50C5109218E87DD200E93F3B /* UIKit.framework in Frameworks */,
-				50C5109118E87DD200E93F3B /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -383,7 +354,6 @@
 				50980908190D3D8C0096AF42 /* Categories */,
 				50F07355190CE5290041BA84 /* Third Party */,
 				50C5107618E87DD200E93F3B /* WelcomeProject */,
-				50C5109518E87DD200E93F3B /* WelcomeProjectTests */,
 				50C5106F18E87DD200E93F3B /* Frameworks */,
 				50C5106E18E87DD200E93F3B /* Products */,
 			);
@@ -393,7 +363,6 @@
 			isa = PBXGroup;
 			children = (
 				50C5106D18E87DD200E93F3B /* WelcomeProject.app */,
-				50C5108E18E87DD200E93F3B /* WelcomeProjectTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -434,24 +403,6 @@
 				50C5107918E87DD200E93F3B /* InfoPlist.strings */,
 				50C5107C18E87DD200E93F3B /* main.m */,
 				50C5107E18E87DD200E93F3B /* WelcomeProject-Prefix.pch */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		50C5109518E87DD200E93F3B /* WelcomeProjectTests */ = {
-			isa = PBXGroup;
-			children = (
-				50C5109B18E87DD200E93F3B /* WelcomeProjectTests.m */,
-				50C5109618E87DD200E93F3B /* Supporting Files */,
-			);
-			path = WelcomeProjectTests;
-			sourceTree = "<group>";
-		};
-		50C5109618E87DD200E93F3B /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				50C5109718E87DD200E93F3B /* WelcomeProjectTests-Info.plist */,
-				50C5109818E87DD200E93F3B /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -532,24 +483,6 @@
 			productReference = 50C5106D18E87DD200E93F3B /* WelcomeProject.app */;
 			productType = "com.apple.product-type.application";
 		};
-		50C5108D18E87DD200E93F3B /* WelcomeProjectTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 50C510A218E87DD200E93F3B /* Build configuration list for PBXNativeTarget "WelcomeProjectTests" */;
-			buildPhases = (
-				50C5108A18E87DD200E93F3B /* Sources */,
-				50C5108B18E87DD200E93F3B /* Frameworks */,
-				50C5108C18E87DD200E93F3B /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				50C5109418E87DD200E93F3B /* PBXTargetDependency */,
-			);
-			name = WelcomeProjectTests;
-			productName = WelcomeProjectTests;
-			productReference = 50C5108E18E87DD200E93F3B /* WelcomeProjectTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -562,9 +495,6 @@
 				TargetAttributes = {
 					50C5106C18E87DD200E93F3B = {
 						DevelopmentTeam = 22H23T9UE8;
-					};
-					50C5108D18E87DD200E93F3B = {
-						TestTargetID = 50C5106C18E87DD200E93F3B;
 					};
 				};
 			};
@@ -582,7 +512,6 @@
 			projectRoot = "";
 			targets = (
 				50C5106C18E87DD200E93F3B /* WelcomeProject */,
-				50C5108D18E87DD200E93F3B /* WelcomeProjectTests */,
 			);
 		};
 /* End PBXProject section */
@@ -597,14 +526,6 @@
 				50C5108918E87DD200E93F3B /* Images.xcassets in Resources */,
 				50C5107B18E87DD200E93F3B /* InfoPlist.strings in Resources */,
 				50C5108418E87DD200E93F3B /* Main.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		50C5108C18E87DD200E93F3B /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				50C5109A18E87DD200E93F3B /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -660,23 +581,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		50C5108A18E87DD200E93F3B /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				50C5109C18E87DD200E93F3B /* WelcomeProjectTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		50C5109418E87DD200E93F3B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 50C5106C18E87DD200E93F3B /* WelcomeProject */;
-			targetProxy = 50C5109318E87DD200E93F3B /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		50C5107918E87DD200E93F3B /* InfoPlist.strings */ = {
@@ -693,14 +598,6 @@
 				50C5108318E87DD200E93F3B /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		50C5109818E87DD200E93F3B /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				50C5109918E87DD200E93F3B /* en */,
-			);
-			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -816,46 +713,6 @@
 			};
 			name = Release;
 		};
-		50C510A318E87DD200E93F3B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/WelcomeProject.app/WelcomeProject";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "WelcomeProject/WelcomeProject-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "WelcomeProjectTests/WelcomeProjectTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Debug;
-		};
-		50C510A418E87DD200E93F3B /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/WelcomeProject.app/WelcomeProject";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "WelcomeProject/WelcomeProject-Prefix.pch";
-				INFOPLIST_FILE = "WelcomeProjectTests/WelcomeProjectTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -873,15 +730,6 @@
 			buildConfigurations = (
 				50C510A018E87DD200E93F3B /* Debug */,
 				50C510A118E87DD200E93F3B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		50C510A218E87DD200E93F3B /* Build configuration list for PBXNativeTarget "WelcomeProjectTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				50C510A318E87DD200E93F3B /* Debug */,
-				50C510A418E87DD200E93F3B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
