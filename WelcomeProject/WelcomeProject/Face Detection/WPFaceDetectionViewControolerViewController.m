@@ -19,9 +19,10 @@
 #import "POPSpringAnimation.h"
 #import "POPBasicAnimation.h"
 #import "WPUNRecognizedGuestViewController.h"
+#import "WPAppDelegate.h"
 
 
-#define kMaxPictures 3
+#define kMaxPictures 1
 #pragma mark-
 
 // used for KVO observation of the @"capturingStillImage" property to perform flash bulb animation
@@ -39,6 +40,7 @@ static CGFloat DegreesToRadians(CGFloat degrees) {return degrees * M_PI / 180;};
 @property (nonatomic)BOOL detectedFace;
 @property (nonatomic, strong)NSString* guestId;
 @property (nonatomic, strong)NSArray * weloceMessages;
+@property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @end
 
 @implementation WPFaceDetectionViewControolerViewController
@@ -576,14 +578,16 @@ bail:
                   
                   [images addObject:imageCopy2];
                   
-                  UIImageView *imageView = imageViews[images.count - 1];
-                  imageView.image  = scaledImage;
+                  //UIImageView *imageView = imageViews[images.count - 1];
+                  self.imageView.image  = scaledImage;
+                  WPAppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
+                  appDelegate.profileImage = imageCopy2;
                   
-                  CGRect frame = imageView.frame;
+                  //CGRect frame = imageView.frame;
                   
-                  imageView.frame = CGRectMake(250, 300, imageView.frame.size.width, imageView.frame.size.height);
-                  imageView.transform =  CGAffineTransformMakeScale(0.5, 0.5);
-                  imageView.hidden = NO;
+                  //imageView.frame = CGRectMake(250, 300, imageView.frame.size.width, imageView.frame.size.height);
+                  //imageView.transform =  CGAffineTransformMakeScale(0.5, 0.5);
+                  //imageView.hidden = NO;
                   //imageView.transform = CGAffineTransformMakeRotation(M_PI/2);
                   
                   [UIView animateWithDuration:1.5
@@ -592,8 +596,8 @@ bail:
                         initialSpringVelocity:6.0
                                       options:UIViewAnimationOptionLayoutSubviews
                                    animations:^{
-                                       imageView.frame = frame;
-                                       imageView.transform =  CGAffineTransformMakeScale(1.0, 1.0);
+                                       //imageView.frame = frame;
+                                       //imageView.transform =  CGAffineTransformMakeScale(1.0, 1.0);
                                        //imageView.transform = CGAffineTransformMakeRotation(M_PI/2);
                   } completion:^(BOOL finished) {
                       
@@ -969,6 +973,10 @@ bail:
 	}
 }
 
+- (IBAction)skipButtonAction:(UIButton *)sender {
+
+    [self performSegueWithIdentifier:@"UnrecognizedGuestSegue" sender:self];
+}
 
 #pragma mark - IBaction (MOCK)
 - (IBAction)Unrecognized:(UIButton *)sender {

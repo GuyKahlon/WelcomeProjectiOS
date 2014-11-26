@@ -10,6 +10,8 @@
 #import "WPInnovaServer.h"
 #import "WPSearchHostTableViewController.h"
 #import <QuartzCore/QuartzCore.h>
+#import "WPAppDelegate.h"
+
 @interface WPUnrecognizedGuestViewController ()<UIPickerViewDelegate, UITextFieldDelegate, WPSearchHostTableViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *selectHostsTextField;
 @property (strong, nonatomic) NSArray* hosts;
@@ -17,10 +19,14 @@
 @property (strong, nonatomic) IBOutletCollection(UITextField) NSArray *textFieldsCollections;
 @property (weak, nonatomic)UITextField* currentTextField;
 @property (weak, nonatomic) IBOutlet UIButton *notifyButton;
-@property (weak, nonatomic) IBOutlet UITextField *emailTextField;
+
 
 @property (strong, nonatomic)NSString* hostId;
 
+@property (weak, nonatomic) IBOutlet UITextField *firstNameTextField;
+@property (weak, nonatomic) IBOutlet UITextField *lastNameTextField;
+@property (weak, nonatomic) IBOutlet UITextField *emailTextField;
+@property (weak, nonatomic) IBOutlet UITextField *phoneTextField;
 
 @end
 
@@ -50,12 +56,6 @@
 //    }];
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 #pragma mark - Private
 -(BOOL) IsValidEmail:(NSString *)emailString Strict:(BOOL)strictFilter
 {
@@ -78,15 +78,38 @@
 {
     WPInnovaServer *server = [[WPInnovaServer alloc]init];
     
-    [server createGuestWithGuest:@{@"firstName":@"Guy",
-                                   @"lastName": @"Kahlon",
-                                   @"email":@"guykahlon@gmail.com",
-                                   @"phoneNumber":@"0509944364",
-                                   @"picUrl":self.guestId}
-                          hostId:@"1"];
+    WPAppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
     
+    
+        
+    UIImage *scaledImage = [UIImage imageWithCGImage:[appDelegate.profileImage CGImage]
+                                                   scale:(appDelegate.profileImage.scale * 1.0)
+                                             orientation:(UIImageOrientationRight)];
+    NSString *imageBase64 = [self imageBase64String:scaledImage];
+    
+    
+    [server createGuestWithGuest:@{@"firstName":self.firstNameTextField.text,
+                                   @"lastName": self.lastNameTextField.text,
+                                   @"email": self.emailTextField.text,
+                                   @"phoneNumber": appDelegate.phoneNumber,
+                                   @"pic":imageBase64
+                                   }
+                                   hostId:self.hostId];
+    
+    appDelegate.phoneNumber = nil;
+    appDelegate.profileImage = nil;
+    
+    //[self performSegueWithIdentifier:@"Wating ViewController Segue" sender:self];
+}
 
-    [self performSegueWithIdentifier:@"Wating ViewController Segue" sender:self];
+- (NSString *)imageBase64String:(UIImage *)image
+{
+    if (image == nil){
+        return @"";
+    }
+    
+    NSData * data = [UIImagePNGRepresentation(image) base64EncodedDataWithOptions:NSDataBase64Encoding64CharacterLineLength];
+    return [NSString stringWithUTF8String:[data bytes]];
 }
 
 #pragma mark - UItextFieldDelegate
@@ -136,7 +159,6 @@
     if ([segue.identifier isEqualToString:@"SearchHostSegue"]) {
         
         WPSearchHostTableViewController* searchHostViewController = segue.destinationViewController;
-//        searchHostViewController.hosts = self.hosts;
         searchHostViewController.delegate = self;
     }
 }

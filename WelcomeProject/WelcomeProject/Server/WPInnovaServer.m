@@ -18,30 +18,49 @@
 {
     if (!_manager)
     {
-        _manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@"http://10.29.33.26/"]];
+        _manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@"http://10.29.100.212/"]];
         _manager.responseSerializer = [AFHTTPResponseSerializer serializer];
         _manager.requestSerializer  = [AFJSONRequestSerializer serializer];
     }
     return _manager;
 }
 
+- (void)searchGuestByPhoneNumber:(NSString *)phoneNumber resualtBloack:(WPServerSearchResualt)resualtBloack;
+{
+    [self.manager GET:[NSString stringWithFormat:@"guests/searchByPhone?phoneNumber=%@",phoneNumber]
+           parameters:nil
+              success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                   
+                   NSDictionary *jsonObject = [NSJSONSerialization JSONObjectWithData:responseObject
+                                                                              options:NSJSONReadingMutableContainers
+                                                                                error:nil];
+                   id userDetails = jsonObject[@"guest"];
+                   if ([[userDetails description]isEqualToString:@"{}"])
+                   {
+                       if (resualtBloack) {
+                           resualtBloack(NO,jsonObject);
+                       }
+                   }
+                   else{
+                       if (resualtBloack) {
+                           resualtBloack(YES,userDetails);
+                       }
+                   }
+               } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                   
+                   NSLog(@"Error: %@", error);
+               }];
+}
+
 - (void)searchGuestByPicture:(NSArray *)arrayImages resualtBloack:(WPServerSearchResualt)resualtBloack;
 {
-    //Return mock not find guest.
-//    if (resualtBloack) {
-//        resualtBloack(NO,nil);
-//    }
-//    return ;
-//    
     [self.manager POST:@"guests/search"
             parameters:@{@"pictures":arrayImages}
                success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                
-            
+                   
    NSDictionary *jsonObject = [NSJSONSerialization JSONObjectWithData:responseObject
                                                               options:NSJSONReadingMutableContainers
                                                                 error:nil];
-                   
     id userDetails = jsonObject[@"guest"];
     if ([[userDetails description]isEqualToString:@"{}"])
     {
@@ -53,7 +72,7 @@
        if (resualtBloack) {
            resualtBloack(YES,userDetails);
        }
-    }
+     }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
        
        NSLog(@"Error: %@", error);
@@ -93,12 +112,11 @@
             parameters:nil
                success:^(AFHTTPRequestOperation *operation, id responseObject) {
                    
-                   
            NSDictionary *jsonObject = [NSJSONSerialization JSONObjectWithData:responseObject
-                                                                      options:NSJSONReadingMutableContainers error:nil];
+                                                                      options:NSJSONReadingMutableContainers
+                                                                        error:nil];
 
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-           
            NSLog(@"Error: %@", error);
         }];
 }

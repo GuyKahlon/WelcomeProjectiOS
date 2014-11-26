@@ -11,5 +11,6 @@
 @interface WPAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-
+@property (strong, nonatomic) NSString *phoneNumber;
+@property (strong, nonatomic) UIImage  *profileImage;
 @end

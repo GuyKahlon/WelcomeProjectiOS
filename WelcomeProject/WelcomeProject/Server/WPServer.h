@@ -12,6 +12,10 @@ typedef void(^WPServerSearchResualt)(BOOL find, NSDictionary *jsonData);
 typedef void(^WPServerHostsListResualt)(NSArray *hosts);
 
 @protocol WPServer <NSObject>
+
+//Search Guest by phonenumber
+- (void)searchGuestByPhoneNumber:(NSString *)phoneNumber resualtBloack:(WPServerSearchResualt)resualtBloack;
+
 //Search Guest by picture
 - (void)searchGuestByPicture:(NSArray *)arrayImages resualtBloack:(WPServerSearchResualt)resualtBloack;
 

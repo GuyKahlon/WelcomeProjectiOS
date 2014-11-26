@@ -43,8 +43,8 @@
     if (self.model)
     {
         self.firstNameLabel.text = self.model[@"firstName"];
-        self.lastNameLabel.text = self.model[@"lastName"];
-        self.emailLabel.text = self.model[@"email"];
+        self.lastNameLabel.text  = self.model[@"lastName"];
+        self.emailLabel.text     = self.model[@"email"];
         self.telephoneLabel.text = self.model[@"phoneNumber"];
         //self.model[@"picUrl"];
         self.guestId = self.model[@"id"];
@@ -109,8 +109,4 @@
     }
     self.hostId = hostId;
 }
-
-
-
-
 @end

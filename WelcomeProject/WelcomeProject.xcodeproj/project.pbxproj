@@ -31,12 +31,9 @@
 		50203BB419A5EF2900E76213 /* FlatButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 50203BB319A5EF2900E76213 /* FlatButton.m */; };
 		503D42271932248B004EE93D /* WPUnrecognizedGuestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 503D42261932248B004EE93D /* WPUnrecognizedGuestViewController.m */; };
 		503D429219323FEB004EE93D /* CALayer+XibConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 503D429119323FEB004EE93D /* CALayer+XibConfiguration.m */; };
-		504C8F3C19A9CCA200AFDB4A /* CitiTLVA.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 504C8F3A19A9CCA200AFDB4A /* CitiTLVA.jpeg */; };
 		504C8F4319A9DFB600AFDB4A /* WPWatingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 504C8F4219A9DFB600AFDB4A /* WPWatingViewController.m */; };
-		504C8F4719A9FD3D00AFDB4A /* CitiTLV.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 504C8F4619A9FD3D00AFDB4A /* CitiTLV.jpg */; };
 		509808F6190CE9640096AF42 /* WPInnovaServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 509808F5190CE9640096AF42 /* WPInnovaServer.m */; };
 		509808F9190CF5EC0096AF42 /* WPFaceDetectionViewControolerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 509808F8190CF5EC0096AF42 /* WPFaceDetectionViewControolerViewController.m */; };
-		509808FD190CFF6D0096AF42 /* squarePNG.png in Resources */ = {isa = PBXBuildFile; fileRef = 509808FC190CFF6D0096AF42 /* squarePNG.png */; };
 		509808FF190D1B020096AF42 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 509808FE190D1B020096AF42 /* CoreImage.framework */; };
 		50980903190D26C50096AF42 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 50980902190D26C50096AF42 /* MBProgressHUD.m */; };
 		50980907190D2FFA0096AF42 /* WPRecognizedGuestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50980906190D2FFA0096AF42 /* WPRecognizedGuestViewController.m */; };
@@ -48,7 +45,7 @@
 		50C5107D18E87DD200E93F3B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 50C5107C18E87DD200E93F3B /* main.m */; };
 		50C5108118E87DD200E93F3B /* WPAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 50C5108018E87DD200E93F3B /* WPAppDelegate.m */; };
 		50C5108418E87DD200E93F3B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50C5108218E87DD200E93F3B /* Main.storyboard */; };
-		50C5108718E87DD200E93F3B /* WPViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50C5108618E87DD200E93F3B /* WPViewController.m */; };
+		50C5108718E87DD200E93F3B /* WPMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50C5108618E87DD200E93F3B /* WPMainViewController.m */; };
 		50C5108918E87DD200E93F3B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 50C5108818E87DD200E93F3B /* Images.xcassets */; };
 		50C5109018E87DD200E93F3B /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50C5108F18E87DD200E93F3B /* XCTest.framework */; };
 		50C5109118E87DD200E93F3B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50C5107018E87DD200E93F3B /* Foundation.framework */; };
@@ -65,7 +62,6 @@
 		50F07370190CE5520041BA84 /* AFURLRequestSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F07365190CE5520041BA84 /* AFURLRequestSerialization.m */; };
 		50F07371190CE5520041BA84 /* AFURLResponseSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F07367190CE5520041BA84 /* AFURLResponseSerialization.m */; };
 		50F07372190CE5520041BA84 /* AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F07369190CE5520041BA84 /* AFURLSessionManager.m */; };
-		50F07375190CE6000041BA84 /* WPServerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F07374190CE6000041BA84 /* WPServerManager.m */; };
 		50F29457190D5982008C7E58 /* WPFloatingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 50F29456190D5982008C7E58 /* WPFloatingView.m */; };
 /* End PBXBuildFile section */
 
@@ -141,16 +137,13 @@
 		503D42261932248B004EE93D /* WPUnrecognizedGuestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WPUnrecognizedGuestViewController.m; sourceTree = "<group>"; };
 		503D429019323FEB004EE93D /* CALayer+XibConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CALayer+XibConfiguration.h"; path = "Third Party/ConverntionalC/CALayer+XibConfiguration.h"; sourceTree = "<group>"; };
 		503D429119323FEB004EE93D /* CALayer+XibConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CALayer+XibConfiguration.m"; path = "Third Party/ConverntionalC/CALayer+XibConfiguration.m"; sourceTree = "<group>"; };
-		504C8F3A19A9CCA200AFDB4A /* CitiTLVA.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = CitiTLVA.jpeg; sourceTree = "<group>"; };
 		504C8F4119A9DFB600AFDB4A /* WPWatingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WPWatingViewController.h; sourceTree = "<group>"; };
 		504C8F4219A9DFB600AFDB4A /* WPWatingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WPWatingViewController.m; sourceTree = "<group>"; };
-		504C8F4619A9FD3D00AFDB4A /* CitiTLV.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = CitiTLV.jpg; sourceTree = "<group>"; };
 		509808ED190CE8400096AF42 /* WPServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WPServer.h; path = Server/WPServer.h; sourceTree = "<group>"; };
 		509808F4190CE9640096AF42 /* WPInnovaServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WPInnovaServer.h; path = Server/WPInnovaServer.h; sourceTree = "<group>"; };
 		509808F5190CE9640096AF42 /* WPInnovaServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WPInnovaServer.m; path = Server/WPInnovaServer.m; sourceTree = "<group>"; };
 		509808F7190CF5EC0096AF42 /* WPFaceDetectionViewControolerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WPFaceDetectionViewControolerViewController.h; path = "Face Detection/WPFaceDetectionViewControolerViewController.h"; sourceTree = "<group>"; };
 		509808F8190CF5EC0096AF42 /* WPFaceDetectionViewControolerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WPFaceDetectionViewControolerViewController.m; path = "Face Detection/WPFaceDetectionViewControolerViewController.m"; sourceTree = "<group>"; };
-		509808FC190CFF6D0096AF42 /* squarePNG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = squarePNG.png; sourceTree = "<group>"; };
 		509808FE190D1B020096AF42 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		50980901190D26C50096AF42 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MBProgressHUD.h; path = "Third Party/MBProgressHUD/MBProgressHUD.h"; sourceTree = "<group>"; };
 		50980902190D26C50096AF42 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MBProgressHUD.m; path = "Third Party/MBProgressHUD/MBProgressHUD.m"; sourceTree = "<group>"; };
@@ -169,15 +162,15 @@
 		50C5107F18E87DD200E93F3B /* WPAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WPAppDelegate.h; sourceTree = "<group>"; };
 		50C5108018E87DD200E93F3B /* WPAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WPAppDelegate.m; sourceTree = "<group>"; };
 		50C5108318E87DD200E93F3B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		50C5108518E87DD200E93F3B /* WPViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WPViewController.h; sourceTree = "<group>"; };
-		50C5108618E87DD200E93F3B /* WPViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WPViewController.m; sourceTree = "<group>"; };
+		50C5108518E87DD200E93F3B /* WPMainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WPMainViewController.h; sourceTree = "<group>"; };
+		50C5108618E87DD200E93F3B /* WPMainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WPMainViewController.m; sourceTree = "<group>"; };
 		50C5108818E87DD200E93F3B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		50C5108E18E87DD200E93F3B /* WelcomeProjectTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WelcomeProjectTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		50C5108F18E87DD200E93F3B /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		50C5109718E87DD200E93F3B /* WelcomeProjectTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "WelcomeProjectTests-Info.plist"; sourceTree = "<group>"; };
 		50C5109918E87DD200E93F3B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		50C5109B18E87DD200E93F3B /* WelcomeProjectTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WelcomeProjectTests.m; sourceTree = "<group>"; };
-		50D79FFA19C1E0B90006C043 /* CitiInnovationLabTLV.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = CitiInnovationLabTLV.mov; sourceTree = "<group>"; };
+		50D79FFA19C1E0B90006C043 /* CitiInnovationLabTLV.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; name = CitiInnovationLabTLV.mov; path = ../CitiInnovationLabTLV.mov; sourceTree = "<group>"; };
 		50F07357190CE5520041BA84 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
 		50F07358190CE5520041BA84 /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperation.m; sourceTree = "<group>"; };
 		50F07359190CE5520041BA84 /* AFHTTPRequestOperationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperationManager.h; sourceTree = "<group>"; };
@@ -197,8 +190,6 @@
 		50F07367190CE5520041BA84 /* AFURLResponseSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLResponseSerialization.m; sourceTree = "<group>"; };
 		50F07368190CE5520041BA84 /* AFURLSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLSessionManager.h; sourceTree = "<group>"; };
 		50F07369190CE5520041BA84 /* AFURLSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLSessionManager.m; sourceTree = "<group>"; };
-		50F07373190CE6000041BA84 /* WPServerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WPServerManager.h; path = Server/WPServerManager.h; sourceTree = "<group>"; };
-		50F07374190CE6000041BA84 /* WPServerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WPServerManager.m; path = Server/WPServerManager.m; sourceTree = "<group>"; };
 		50F29455190D5982008C7E58 /* WPFloatingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WPFloatingView.h; path = Extensions/UI/WPFloatingView.h; sourceTree = "<group>"; };
 		50F29456190D5982008C7E58 /* WPFloatingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WPFloatingView.m; path = Extensions/UI/WPFloatingView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -324,6 +315,40 @@
 			name = ConventionalC;
 			sourceTree = "<group>";
 		};
+		506A04061A2601F700CF416E /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				50C5108518E87DD200E93F3B /* WPMainViewController.h */,
+				50C5108618E87DD200E93F3B /* WPMainViewController.m */,
+				5005E24119697CE200CEAFDF /* WPSearchHostTableViewController.h */,
+				5005E24219697CE200CEAFDF /* WPSearchHostTableViewController.m */,
+				504C8F4119A9DFB600AFDB4A /* WPWatingViewController.h */,
+				504C8F4219A9DFB600AFDB4A /* WPWatingViewController.m */,
+				50980905190D2FFA0096AF42 /* WPRecognizedGuestViewController.h */,
+				50980906190D2FFA0096AF42 /* WPRecognizedGuestViewController.m */,
+				503D42251932248B004EE93D /* WPUnrecognizedGuestViewController.h */,
+				503D42261932248B004EE93D /* WPUnrecognizedGuestViewController.m */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		506A04071A26021700CF416E /* View */ = {
+			isa = PBXGroup;
+			children = (
+				50F29455190D5982008C7E58 /* WPFloatingView.h */,
+				50F29456190D5982008C7E58 /* WPFloatingView.m */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		506A04081A26025200CF416E /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				50D79FFA19C1E0B90006C043 /* CitiInnovationLabTLV.mov */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		509808FB190CF6070096AF42 /* Face Detection */ = {
 			isa = PBXGroup;
 			children = (
@@ -355,7 +380,6 @@
 		50C5106418E87DD200E93F3B = {
 			isa = PBXGroup;
 			children = (
-				50D79FFA19C1E0B90006C043 /* CitiInnovationLabTLV.mov */,
 				50980908190D3D8C0096AF42 /* Categories */,
 				50F07355190CE5290041BA84 /* Third Party */,
 				50C5107618E87DD200E93F3B /* WelcomeProject */,
@@ -389,27 +413,15 @@
 		50C5107618E87DD200E93F3B /* WelcomeProject */ = {
 			isa = PBXGroup;
 			children = (
-				50F07376190CE6090041BA84 /* Server */,
 				50C5107F18E87DD200E93F3B /* WPAppDelegate.h */,
 				50C5108018E87DD200E93F3B /* WPAppDelegate.m */,
-				50C5108518E87DD200E93F3B /* WPViewController.h */,
-				50C5108618E87DD200E93F3B /* WPViewController.m */,
-				50980905190D2FFA0096AF42 /* WPRecognizedGuestViewController.h */,
-				50980906190D2FFA0096AF42 /* WPRecognizedGuestViewController.m */,
-				503D42251932248B004EE93D /* WPUnrecognizedGuestViewController.h */,
-				503D42261932248B004EE93D /* WPUnrecognizedGuestViewController.m */,
-				5005E24119697CE200CEAFDF /* WPSearchHostTableViewController.h */,
-				5005E24219697CE200CEAFDF /* WPSearchHostTableViewController.m */,
-				504C8F4119A9DFB600AFDB4A /* WPWatingViewController.h */,
-				504C8F4219A9DFB600AFDB4A /* WPWatingViewController.m */,
 				50C5108218E87DD200E93F3B /* Main.storyboard */,
-				509808FC190CFF6D0096AF42 /* squarePNG.png */,
-				50F29455190D5982008C7E58 /* WPFloatingView.h */,
-				50F29456190D5982008C7E58 /* WPFloatingView.m */,
+				506A04071A26021700CF416E /* View */,
+				506A04061A2601F700CF416E /* Controller */,
+				50F07376190CE6090041BA84 /* Server */,
 				509808FB190CF6070096AF42 /* Face Detection */,
+				506A04081A26025200CF416E /* Resources */,
 				50C5108818E87DD200E93F3B /* Images.xcassets */,
-				504C8F4619A9FD3D00AFDB4A /* CitiTLV.jpg */,
-				504C8F3A19A9CCA200AFDB4A /* CitiTLVA.jpeg */,
 				50C5107718E87DD200E93F3B /* Supporting Files */,
 			);
 			path = WelcomeProject;
@@ -485,10 +497,9 @@
 		50F07376190CE6090041BA84 /* Server */ = {
 			isa = PBXGroup;
 			children = (
-				50F07378190CE6260041BA84 /* Server Manager */,
-				50F07377190CE6140041BA84 /* Protocol */,
 				509808F4190CE9640096AF42 /* WPInnovaServer.h */,
 				509808F5190CE9640096AF42 /* WPInnovaServer.m */,
+				50F07377190CE6140041BA84 /* Protocol */,
 			);
 			name = Server;
 			sourceTree = "<group>";
@@ -499,15 +510,6 @@
 				509808ED190CE8400096AF42 /* WPServer.h */,
 			);
 			name = Protocol;
-			sourceTree = "<group>";
-		};
-		50F07378190CE6260041BA84 /* Server Manager */ = {
-			isa = PBXGroup;
-			children = (
-				50F07373190CE6000041BA84 /* WPServerManager.h */,
-				50F07374190CE6000041BA84 /* WPServerManager.m */,
-			);
-			name = "Server Manager";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -591,11 +593,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				50203B9D19A5EE7900E76213 /* LICENSE in Resources */,
-				504C8F3C19A9CCA200AFDB4A /* CitiTLVA.jpeg in Resources */,
 				50D79FFB19C1E0B90006C043 /* CitiInnovationLabTLV.mov in Resources */,
 				50C5108918E87DD200E93F3B /* Images.xcassets in Resources */,
-				509808FD190CFF6D0096AF42 /* squarePNG.png in Resources */,
-				504C8F4719A9FD3D00AFDB4A /* CitiTLV.jpg in Resources */,
 				50C5107B18E87DD200E93F3B /* InfoPlist.strings in Resources */,
 				50C5108418E87DD200E93F3B /* Main.storyboard in Resources */,
 			);
@@ -623,7 +622,6 @@
 				50203BAC19A5EE7900E76213 /* POPPropertyAnimation.mm in Sources */,
 				50C5107D18E87DD200E93F3B /* main.m in Sources */,
 				509808F6190CE9640096AF42 /* WPInnovaServer.m in Sources */,
-				50F07375190CE6000041BA84 /* WPServerManager.m in Sources */,
 				50203BA519A5EE7900E76213 /* POPBasicAnimation.mm in Sources */,
 				50F0736B190CE5520041BA84 /* AFHTTPRequestOperationManager.m in Sources */,
 				50203BA719A5EE7900E76213 /* POPCustomAnimation.mm in Sources */,
@@ -653,7 +651,7 @@
 				5098090B190D3E030096AF42 /* NSObject+Block.m in Sources */,
 				50F07372190CE5520041BA84 /* AFURLSessionManager.m in Sources */,
 				50C5108118E87DD200E93F3B /* WPAppDelegate.m in Sources */,
-				50C5108718E87DD200E93F3B /* WPViewController.m in Sources */,
+				50C5108718E87DD200E93F3B /* WPMainViewController.m in Sources */,
 				50980907190D2FFA0096AF42 /* WPRecognizedGuestViewController.m in Sources */,
 				509808F9190CF5EC0096AF42 /* WPFaceDetectionViewControolerViewController.m in Sources */,
 				50980903190D26C50096AF42 /* MBProgressHUD.m in Sources */,
