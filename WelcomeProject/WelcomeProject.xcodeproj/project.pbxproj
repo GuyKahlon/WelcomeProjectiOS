@@ -27,7 +27,6 @@
 		50203BAD19A5EE7900E76213 /* POPSpringAnimation.mm in Sources */ = {isa = PBXBuildFile; fileRef = 50203B9219A5EE7900E76213 /* POPSpringAnimation.mm */; };
 		50203BAE19A5EE7900E76213 /* POPVector.mm in Sources */ = {isa = PBXBuildFile; fileRef = 50203B9619A5EE7900E76213 /* POPVector.mm */; };
 		50203BAF19A5EE7900E76213 /* TransformationMatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50203B9919A5EE7900E76213 /* TransformationMatrix.cpp */; };
-		50203BB019A5EE7900E76213 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 50203B9C19A5EE7900E76213 /* README.md */; };
 		50203BB419A5EF2900E76213 /* FlatButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 50203BB319A5EF2900E76213 /* FlatButton.m */; };
 		503D42271932248B004EE93D /* WPUnrecognizedGuestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 503D42261932248B004EE93D /* WPUnrecognizedGuestViewController.m */; };
 		503D429219323FEB004EE93D /* CALayer+XibConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 503D429119323FEB004EE93D /* CALayer+XibConfiguration.m */; };
@@ -115,7 +114,6 @@
 		50203B9919A5EE7900E76213 /* TransformationMatrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TransformationMatrix.cpp; sourceTree = "<group>"; };
 		50203B9A19A5EE7900E76213 /* TransformationMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransformationMatrix.h; sourceTree = "<group>"; };
 		50203B9B19A5EE7900E76213 /* UnitBezier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnitBezier.h; sourceTree = "<group>"; };
-		50203B9C19A5EE7900E76213 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		50203BB219A5EF2900E76213 /* FlatButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlatButton.h; sourceTree = "<group>"; };
 		50203BB319A5EF2900E76213 /* FlatButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlatButton.m; sourceTree = "<group>"; };
 		503D42251932248B004EE93D /* WPUnrecognizedGuestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WPUnrecognizedGuestViewController.h; sourceTree = "<group>"; };
@@ -150,7 +148,6 @@
 		50C5108518E87DD200E93F3B /* WPMainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WPMainViewController.h; sourceTree = "<group>"; };
 		50C5108618E87DD200E93F3B /* WPMainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WPMainViewController.m; sourceTree = "<group>"; };
 		50C5108818E87DD200E93F3B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		50C5108F18E87DD200E93F3B /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		50D79FFA19C1E0B90006C043 /* CitiInnovationLabTLV.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; name = CitiInnovationLabTLV.mov; path = ../CitiInnovationLabTLV.mov; sourceTree = "<group>"; };
 		50F07357190CE5520041BA84 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
 		50F07358190CE5520041BA84 /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperation.m; sourceTree = "<group>"; };
@@ -195,7 +192,6 @@
 			children = (
 				50203B6619A5EE7900E76213 /* LICENSE */,
 				50203B6719A5EE7900E76213 /* pop */,
-				50203B9C19A5EE7900E76213 /* README.md */,
 			);
 			name = pop;
 			path = "Third Party/pop";
@@ -277,15 +273,6 @@
 			path = "Third Party/PopControls";
 			sourceTree = "<group>";
 		};
-		503D422819323D94004EE93D /* ConventionalC */ = {
-			isa = PBXGroup;
-			children = (
-				503D429019323FEB004EE93D /* CALayer+XibConfiguration.h */,
-				503D429119323FEB004EE93D /* CALayer+XibConfiguration.m */,
-			);
-			name = ConventionalC;
-			sourceTree = "<group>";
-		};
 		506A04061A2601F700CF416E /* Controller */ = {
 			isa = PBXGroup;
 			children = (
@@ -341,7 +328,8 @@
 		50980908190D3D8C0096AF42 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				503D422819323D94004EE93D /* ConventionalC */,
+				503D429019323FEB004EE93D /* CALayer+XibConfiguration.h */,
+				503D429119323FEB004EE93D /* CALayer+XibConfiguration.m */,
 				50980909190D3E030096AF42 /* NSObject+Block.h */,
 				5098090A190D3E030096AF42 /* NSObject+Block.m */,
 			);
@@ -374,7 +362,6 @@
 				50C5107018E87DD200E93F3B /* Foundation.framework */,
 				50C5107218E87DD200E93F3B /* CoreGraphics.framework */,
 				50C5107418E87DD200E93F3B /* UIKit.framework */,
-				50C5108F18E87DD200E93F3B /* XCTest.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -576,7 +563,6 @@
 				50980907190D2FFA0096AF42 /* WPRecognizedGuestViewController.m in Sources */,
 				509808F9190CF5EC0096AF42 /* WPFaceDetectionViewControolerViewController.m in Sources */,
 				50980903190D26C50096AF42 /* MBProgressHUD.m in Sources */,
-				50203BB019A5EE7900E76213 /* README.md in Sources */,
 				50203BA419A5EE7900E76213 /* POPAnimator.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

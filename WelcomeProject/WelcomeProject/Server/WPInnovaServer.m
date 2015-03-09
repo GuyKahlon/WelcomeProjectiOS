@@ -80,10 +80,7 @@
 //}
 
 - (void)getHostsListWithResualBlock:(WPServerHostsListResualt)resualtBlock{
-//    if (resualtBlock) {
-//        resualtBlock(nil);
-//    }
-//    return ;
+
     //TODO -- support paging (first page number 0 "page": "1", "size")
     [self.manager GET:@"hosts"
            parameters:@{@"size": @(200)}
@@ -113,8 +110,15 @@
                success:^(AFHTTPRequestOperation *operation, id responseObject) {
                    
            NSDictionary *jsonObject = [NSJSONSerialization JSONObjectWithData:responseObject
-                                                                      options:NSJSONReadingMutableContainers
-                                                                        error:nil];
+                                    options:NSJSONReadingMutableContainers
+                                    error:nil];
+           if ([jsonObject objectForKey:@"errMsg"]) {
+               [[[UIAlertView alloc]initWithTitle:@""
+                                          message:@"Sorry, we couldn't notify your host that you are here. Please ask the guard to call your host."
+                                         delegate:nil
+                                cancelButtonTitle:@"Dismiss"
+                                otherButtonTitles:nil]show];
+           }
 
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
            NSLog(@"Error: %@", error);
