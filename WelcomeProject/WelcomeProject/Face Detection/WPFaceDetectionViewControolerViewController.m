@@ -590,7 +590,7 @@ bail:
                   //imageView.hidden = NO;
                   //imageView.transform = CGAffineTransformMakeRotation(M_PI/2);
                   
-                  [UIView animateWithDuration:1.5
+                  [UIView animateWithDuration:18.5
                                         delay:0.0
                        usingSpringWithDamping:0.6
                         initialSpringVelocity:6.0
@@ -599,6 +599,7 @@ bail:
                                        //imageView.frame = frame;
                                        //imageView.transform =  CGAffineTransformMakeScale(1.0, 1.0);
                                        //imageView.transform = CGAffineTransformMakeRotation(M_PI/2);
+                                       [self skipButtonAction:nil];
                   } completion:^(BOOL finished) {
                       
                       if (images.count >= kMaxPictures )
@@ -1010,35 +1011,35 @@ bail:
 #pragma mark  - Server
 - (void)checkIfTheGuestIsRecognized
 {
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+//    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+//    
+//    WPInnovaServer *server = [[WPInnovaServer alloc]init];
+//    
+//    NSMutableArray* imageArray =[NSMutableArray arrayWithCapacity:3];
+//    
+//    for (UIImage * image in images) {
+//        
+//        UIImage *scaledImage = [UIImage imageWithCGImage:[image CGImage]
+//                                                   scale:(image.scale * 1.0)
+//                                             orientation:(UIImageOrientationRight)];
+//        
+//        NSString *imageBase64 = [self imageBase64String:scaledImage];
+//        [imageArray addObject:imageBase64];
+//    }
     
-    WPInnovaServer *server = [[WPInnovaServer alloc]init];
-    
-    NSMutableArray* imageArray =[NSMutableArray arrayWithCapacity:3];
-    
-    for (UIImage * image in images) {
-        
-        UIImage *scaledImage = [UIImage imageWithCGImage:[image CGImage]
-                                                   scale:(image.scale * 1.0)
-                                             orientation:(UIImageOrientationRight)];
-        
-        NSString *imageBase64 = [self imageBase64String:scaledImage];
-        [imageArray addObject:imageBase64];
-    }
-    
-    [server searchGuestByPicture:imageArray resualtBloack:^(BOOL find, NSDictionary *jsonData) {
-        
-        if (find) {
-            guestInfo = jsonData;
-            [self performSegueWithIdentifier:@"RecognizedGuestSegue" sender:self];
-        }
-        else
-        {
-            self.guestId = jsonData[@"picUrl"];
-            [self performSegueWithIdentifier:@"UnrecognizedGuestSegue" sender:self];
-        }
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-    }];
+//    [server searchGuestByPicture:imageArray resualtBloack:^(BOOL find, NSDictionary *jsonData) {
+//        
+//        if (find) {
+//            guestInfo = jsonData;
+//            [self performSegueWithIdentifier:@"RecognizedGuestSegue" sender:self];
+//        }
+//        else
+//        {
+//            self.guestId = jsonData[@"picUrl"];
+//            [self performSegueWithIdentifier:@"UnrecognizedGuestSegue" sender:self];
+//        }
+//        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+//    }];
 }
 
 @end

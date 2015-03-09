@@ -17,7 +17,7 @@ typedef void(^WPServerHostsListResualt)(NSArray *hosts);
 - (void)searchGuestByPhoneNumber:(NSString *)phoneNumber resualtBloack:(WPServerSearchResualt)resualtBloack;
 
 //Search Guest by picture
-- (void)searchGuestByPicture:(NSArray *)arrayImages resualtBloack:(WPServerSearchResualt)resualtBloack;
+//- (void)searchGuestByPicture:(NSArray *)arrayImages resualtBloack:(WPServerSearchResualt)resualtBloack;
 
 //Get Hosts List
 - (void)getHostsListWithResualBlock:(WPServerHostsListResualt)resualtBlock;

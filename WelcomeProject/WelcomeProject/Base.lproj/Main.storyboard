@@ -381,6 +381,15 @@
                                     <action selector="notifyButtonAction:" destination="0NH-2L-ruB" eventType="touchUpInside" id="yJ1-H9-tfB"/>
                                 </connections>
                             </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pjd-Cy-wDh">
+                                <rect key="frame" x="619" y="208" width="100" height="100"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="50"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
@@ -417,6 +426,7 @@
                         <outlet property="notifyButton" destination="ErV-5a-ZTe" id="bEY-xe-Hrw"/>
                         <outlet property="selectHostsTextField" destination="1wI-jF-GmM" id="xcD-0c-4L4"/>
                         <outlet property="telephoneLabel" destination="Cg7-5i-jKM" id="cqc-fz-9vr"/>
+                        <outlet property="userImage" destination="Pjd-Cy-wDh" id="Vkq-rJ-SNu"/>
                         <segue destination="FGM-A1-TXc" kind="modal" identifier="SearchHostSegue" modalPresentationStyle="formSheet" id="9Fo-sz-omI"/>
                         <segue destination="228-fq-PjD" kind="modal" identifier="Wating ViewController Segue" id="zNd-hD-G0M"/>
                     </connections>
@@ -684,9 +694,9 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="zNd-hD-G0M"/>
+        <segue reference="tPI-s6-l6B"/>
+        <segue reference="7ce-Ig-wFN"/>
         <segue reference="9Fo-sz-omI"/>
-        <segue reference="7LJ-pN-vng"/>
-        <segue reference="DLG-22-LvD"/>
-        <segue reference="Wci-Nb-1vo"/>
     </inferredMetricsTieBreakers>
 </document>

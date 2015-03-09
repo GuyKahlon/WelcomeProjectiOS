@@ -18,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *selectHostsTextField;
 @property (strong, nonatomic) NSArray* hosts;
 @property (weak, nonatomic) IBOutlet UIButton *notifyButton;
+@property (weak, nonatomic) IBOutlet UIImageView *userImage;
 
 
 @property (strong, nonatomic)NSString* hostId;
@@ -46,7 +47,10 @@
         self.lastNameLabel.text  = self.model[@"lastName"];
         self.emailLabel.text     = self.model[@"email"];
         self.telephoneLabel.text = self.model[@"phoneNumber"];
-        //self.model[@"picUrl"];
+        
+        NSData* data = [[NSData alloc] initWithBase64EncodedString:self.model[@"picture"] options:0];
+        self.userImage.image = [UIImage imageWithData:data];
+        
         self.guestId = self.model[@"id"];
     }
 }

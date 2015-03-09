@@ -92,7 +92,7 @@
                                    @"lastName": self.lastNameTextField.text,
                                    @"email": self.emailTextField.text,
                                    @"phoneNumber": appDelegate.phoneNumber,
-                                   @"pic":imageBase64
+                                   @"base64img":imageBase64
                                    }
                                    hostId:self.hostId];
     

@@ -43,7 +43,7 @@
     [self.view addSubview:imageView];
     [self.view bringSubviewToFront:self.playButton];
     
-    self.timer =  [NSTimer scheduledTimerWithTimeInterval:2.0
+    self.timer =  [NSTimer scheduledTimerWithTimeInterval:25.0
                                                    target:self
                                                  selector:@selector(goToMainViewController)
                                                  userInfo:nil

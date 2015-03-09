@@ -29,6 +29,10 @@
     [super viewDidLoad];
 }
 
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self.phoneTextField becomeFirstResponder];
+}
 #pragma mark - Private methods
 - (void)moveToCamera
 {

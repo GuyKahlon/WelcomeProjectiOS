@@ -18,7 +18,7 @@
 {
     if (!_manager)
     {
-        _manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@"http://10.29.100.212/"]];
+        _manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@"http://10.29.39.35/"]];
         _manager.responseSerializer = [AFHTTPResponseSerializer serializer];
         _manager.requestSerializer  = [AFJSONRequestSerializer serializer];
     }
@@ -52,46 +52,46 @@
                }];
 }
 
-- (void)searchGuestByPicture:(NSArray *)arrayImages resualtBloack:(WPServerSearchResualt)resualtBloack;
-{
-    [self.manager POST:@"guests/search"
-            parameters:@{@"pictures":arrayImages}
-               success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                   
-   NSDictionary *jsonObject = [NSJSONSerialization JSONObjectWithData:responseObject
-                                                              options:NSJSONReadingMutableContainers
-                                                                error:nil];
-    id userDetails = jsonObject[@"guest"];
-    if ([[userDetails description]isEqualToString:@"{}"])
-    {
-       if (resualtBloack) {
-           resualtBloack(NO,jsonObject);
-       }
-    }
-    else{
-       if (resualtBloack) {
-           resualtBloack(YES,userDetails);
-       }
-     }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-       
-       NSLog(@"Error: %@", error);
-    }];
-}
+//- (void)searchGuestByPicture:(NSArray *)arrayImages resualtBloack:(WPServerSearchResualt)resualtBloack;
+//{
+//    [self.manager POST:@"guests/search"
+//            parameters:@{@"pictures":arrayImages}
+//               success:^(AFHTTPRequestOperation *operation, id responseObject) {
+//                   
+//   NSDictionary *jsonObject = [NSJSONSerialization JSONObjectWithData:responseObject
+//                                                              options:NSJSONReadingMutableContainers
+//                                                                error:nil];
+//    id userDetails = jsonObject[@"guest"];
+//    if ([[userDetails description]isEqualToString:@"{}"])
+//    {
+//       if (resualtBloack) {
+//           resualtBloack(NO,jsonObject);
+//       }
+//    }
+//    else{
+//       if (resualtBloack) {
+//           resualtBloack(YES,userDetails);
+//       }
+//     }
+//    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+//       
+//       NSLog(@"Error: %@", error);
+//    }];
+//}
 
-- (void)getHostsListWithResualBlock:(WPServerHostsListResualt)resualtBlock;
-{
+- (void)getHostsListWithResualBlock:(WPServerHostsListResualt)resualtBlock{
 //    if (resualtBlock) {
 //        resualtBlock(nil);
 //    }
 //    return ;
+    //TODO -- support paging (first page number 0 "page": "1", "size")
     [self.manager GET:@"hosts"
-         parameters:nil
-            success:^(AFHTTPRequestOperation *operation, id responseObject) {
+           parameters:@{@"size": @(200)}
+              success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 NSLog(@"JSON Response: %@", responseObject);
                 
                 NSDictionary *jsonObject = [NSJSONSerialization JSONObjectWithData:responseObject
-                                                                           options:NSJSONReadingMutableContainers
+                                                                options:NSJSONReadingMutableContainers
                                                                              error:nil];
                 NSArray *hosts = jsonObject[@"hosts"];
                 if (resualtBlock) {
@@ -126,6 +126,10 @@
     [self.manager POST:@"guests"
             parameters:guest
           success:^(AFHTTPRequestOperation *operation, id responseObject) {
+              
+              NSLog(@"createGuestWithGuest response");
+              
+              
               NSDictionary *jsonObject = [NSJSONSerialization JSONObjectWithData:responseObject
                                                                          options:NSJSONReadingMutableContainers
                                                                            error:nil];
