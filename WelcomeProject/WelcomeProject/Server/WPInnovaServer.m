@@ -17,14 +17,15 @@
 - (AFHTTPRequestOperationManager *)manager
 {
     if (!_manager){
-        _manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@"http://10.29.39.35/"]];
+        _manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@"http://52.28.11.39:5678/"]];
         _manager.responseSerializer = [AFHTTPResponseSerializer serializer];
         _manager.requestSerializer  = [AFJSONRequestSerializer serializer];
     }
     return _manager;
 }
 
-- (void)searchGuestByPhoneNumber:(NSString *)phoneNumber resualtBloack:(WPServerSearchResualt)resualtBloack{
+- (void)searchGuestByPhoneNumber:(NSString *)phoneNumber
+                   resualtBloack:(WPServerSearchResualt)resualtBloack{
     [self.manager GET:[NSString stringWithFormat:@"guests/searchByPhone?phoneNumber=%@",phoneNumber]
            parameters:nil
               success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -51,6 +52,7 @@
 }
 
 - (void)getHostsListWithResualBlock:(WPServerHostsListResualt)resualtBlock{
+    
     //TODO -- support paging (first page number 0 "page": "1", "size")
     [self.manager GET:@"hosts"
            parameters:@{@"size": @(200)}
@@ -109,7 +111,7 @@
           }
           NSLog(@"JSON: %@", responseObject);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-              NSLog(@"Error: %@", error);
+          NSLog(@"Error: %@", error);
     }];
 }
 @end

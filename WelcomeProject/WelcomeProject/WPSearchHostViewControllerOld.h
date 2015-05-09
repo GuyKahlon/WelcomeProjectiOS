@@ -8,17 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
-@class WPSearchHostTableViewController;
+@class WPSearchHostViewControllerOld;
 
 @protocol WPSearchHostTableViewControllerDelegate <NSObject>
 
-- (void)searchHostTableViewController:(WPSearchHostTableViewController *)sender
+- (void)searchHostTableViewController:(WPSearchHostViewControllerOld *)sender
                       selectedChanged:(NSString *)hostName
                        selectedHostId:(NSString *)hostId;
 @end
 
 
-@interface WPSearchHostTableViewController: UIViewController
+@interface WPSearchHostViewControllerOld : UITableViewController
 @property (nonatomic, strong)NSArray * hosts;
 @property (nonatomic, weak)id<WPSearchHostTableViewControllerDelegate> delegate;
 @end

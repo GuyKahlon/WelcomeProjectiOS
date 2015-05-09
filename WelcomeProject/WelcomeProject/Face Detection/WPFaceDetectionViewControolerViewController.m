@@ -104,7 +104,8 @@ static CGFloat DegreesToRadians(CGFloat degrees) {return degrees * M_PI / 180;};
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    //[self teardownAVCapture];
+    [stillImageOutput removeObserver:self forKeyPath:@"capturingStillImage"];
+    [self teardownAVCapture];
     
     [self faceDetection:NO];
     [images removeAllObjects];
@@ -113,7 +114,6 @@ static CGFloat DegreesToRadians(CGFloat degrees) {return degrees * M_PI / 180;};
         imageView.image = nil;
         imageView.hidden = YES;
     }
-
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -191,35 +191,6 @@ static CGFloat DegreesToRadians(CGFloat degrees) {return degrees * M_PI / 180;};
 
 
 }
-
-//- (void)showAnimation
-//{
-//    static int number = 1;
-//    numberLabel.text = [NSString stringWithFormat:@"%d",number];
-//    
-//    [UIView animateWithDuration:1.0 animations:^{
-//        // Scale down 50%
-//        numberLabel.transform = CGAffineTransformScale(numberLabel.transform, 0.5, 0.5);
-//    } completion:^(BOOL finished) {
-//        
-//        [UIView animateWithDuration:1.0 animations:^{
-//            // Scale up 50%
-//            numberLabel.transform = CGAffineTransformScale(numberLabel.transform, 2, 2);
-//            //numberLabel.hidden = YES;
-//        } completion:^(BOOL finished) {
-//            numberLabel.transform = CGAffineTransformIdentity;
-//            if (number != 3) {
-//                number ++;
-//                [self showAnimation];
-//            }
-//            else
-//            {
-//                numberLabel.hidden = YES;
-//                [self faceDetection:YES];
-//            }
-//        }];
-//    }];
-//}
 
 - (void)setupAVCapture
 {
@@ -577,38 +548,24 @@ bail:
                                                       orientation:(UIImageOrientationRight)];
                   
                   [images addObject:imageCopy2];
-                  
-                  //UIImageView *imageView = imageViews[images.count - 1];
                   self.imageView.image  = scaledImage;
                   WPAppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
                   appDelegate.profileImage = imageCopy2;
-                  
-                  //CGRect frame = imageView.frame;
-                  
-                  //imageView.frame = CGRectMake(250, 300, imageView.frame.size.width, imageView.frame.size.height);
-                  //imageView.transform =  CGAffineTransformMakeScale(0.5, 0.5);
-                  //imageView.hidden = NO;
-                  //imageView.transform = CGAffineTransformMakeRotation(M_PI/2);
-                  
+
                   [UIView animateWithDuration:18.5
                                         delay:0.0
                        usingSpringWithDamping:0.6
                         initialSpringVelocity:6.0
                                       options:UIViewAnimationOptionLayoutSubviews
                                    animations:^{
-                                       //imageView.frame = frame;
-                                       //imageView.transform =  CGAffineTransformMakeScale(1.0, 1.0);
-                                       //imageView.transform = CGAffineTransformMakeRotation(M_PI/2);
-                                       [self skipButtonAction:nil];
+                                       
                   } completion:^(BOOL finished) {
+                      
+                      [self.navigationController popViewControllerAnimated:YES];
                       
                       if (images.count >= kMaxPictures )
                       {
                           [self checkIfTheGuestIsRecognized];
-                          //                      [self performBlock:^{
-                          //                          //[self faceDetection:YES];
-                          //                          [self checkIfTheGuestIsRecognized];
-                          //                      } afterDelay:0.0];
                       }
                       else
                       {

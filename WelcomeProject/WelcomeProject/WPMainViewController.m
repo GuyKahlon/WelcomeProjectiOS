@@ -5,7 +5,7 @@
 //  Created by Guy Kahlon on 3/30/14.
 //  Copyright (c) 2014 GuyKahlon. All rights reserved.
 //
-
+#import <UIKit/UIKit.h>
 #import "WPMainViewController.h"
 #import "MBProgressHUD.h"
 #import "WPInnovaServer.h"
@@ -24,15 +24,23 @@
 @implementation WPMainViewController
 
 #pragma mark - Life cycle
-- (void)viewDidLoad
-{
+- (void)viewDidLoad{
     [super viewDidLoad];
+    
+    self.phoneTextField.layer.sublayerTransform = CATransform3DMakeTranslation(10, 0, 0);
+    
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage new]
+                             forBarMetrics:UIBarMetricsDefault];
+    self.navigationController.navigationBar.shadowImage = [UIImage new];
+    self.navigationController.navigationBar.translucent = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self.phoneTextField becomeFirstResponder];
+    self.guestInfo = nil;
 }
+
 #pragma mark - Private methods
 - (void)moveToCamera
 {
@@ -54,8 +62,7 @@
     return YES;
 }
 
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
-{
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
     if (self.phoneTextField.text.length >= 9) {
         self.sighnInButton.enabled = YES;
     }
@@ -66,7 +73,7 @@
 }
 
 #pragma mark - IBAction
-- (IBAction)sighnInButtonAction:(UIButton *)sender{
+- (IBAction)signInButtonAction:(UIButton *)sender{
     
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     WPInnovaServer *server = [[WPInnovaServer alloc]init];
@@ -76,6 +83,9 @@
     phone = [phone stringByReplacingOccurrencesOfString:@" " withString:@""];
     phone = [phone stringByReplacingOccurrencesOfString:@"-" withString:@""];
     
+    WPAppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
+    appDelegate.phoneNumber = phone;
+    
     [server searchGuestByPhoneNumber:phone resualtBloack:^(BOOL find, NSDictionary *jsonData) {
         
         if (find) {
@@ -84,11 +94,10 @@
         }
         else
         {
-            [self moveToCamera];
+            [self performSegueWithIdentifier:@"UnRecognizedGuestViewControllerSegue" sender:self];
         }
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
     }];
-
 }
 
 #pragma mark - Navigation
@@ -100,7 +109,7 @@
         recognizedGuestVC.model = self.guestInfo;
         [MBProgressHUD hideHUDForView:self.view animated:YES];
     }
-    else if ([segue.identifier isEqualToString:@"main"]) {
+    else if ([segue.identifier isEqualToString:@"UnRecognizedGuestViewControllerSegue"]) {
         
     }
 }

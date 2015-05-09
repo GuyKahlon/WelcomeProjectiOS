@@ -67,7 +67,7 @@
 }
 
 - (void)goToMainViewController{
-    UIViewController* mainViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"MainViewController"];
+    UIViewController* mainViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"MainViewControllerNav"];
     [self presentViewController:mainViewController animated:YES completion:nil];
 }
 @end

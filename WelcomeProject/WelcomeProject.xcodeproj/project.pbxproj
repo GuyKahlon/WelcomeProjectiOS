@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1A720DB41AFA894500FE30E6 /* WPSearchHostViewControllerOld.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A720DB31AFA894500FE30E6 /* WPSearchHostViewControllerOld.m */; };
 		5005E24319697CE200CEAFDF /* WPSearchHostTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5005E24219697CE200CEAFDF /* WPSearchHostTableViewController.m */; };
 		50203B9D19A5EE7900E76213 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 50203B6619A5EE7900E76213 /* LICENSE */; };
 		50203B9E19A5EE7900E76213 /* POPAnimatableProperty.mm in Sources */ = {isa = PBXBuildFile; fileRef = 50203B6B19A5EE7900E76213 /* POPAnimatableProperty.mm */; };
@@ -60,6 +61,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1A720DB21AFA894500FE30E6 /* WPSearchHostViewControllerOld.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WPSearchHostViewControllerOld.h; sourceTree = "<group>"; };
+		1A720DB31AFA894500FE30E6 /* WPSearchHostViewControllerOld.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WPSearchHostViewControllerOld.m; sourceTree = "<group>"; };
 		5005E24119697CE200CEAFDF /* WPSearchHostTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WPSearchHostTableViewController.h; sourceTree = "<group>"; };
 		5005E24219697CE200CEAFDF /* WPSearchHostTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WPSearchHostTableViewController.m; sourceTree = "<group>"; };
 		50203B6619A5EE7900E76213 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
@@ -278,14 +281,16 @@
 			children = (
 				50C5108518E87DD200E93F3B /* WPMainViewController.h */,
 				50C5108618E87DD200E93F3B /* WPMainViewController.m */,
-				5005E24119697CE200CEAFDF /* WPSearchHostTableViewController.h */,
-				5005E24219697CE200CEAFDF /* WPSearchHostTableViewController.m */,
-				504C8F4119A9DFB600AFDB4A /* WPWatingViewController.h */,
-				504C8F4219A9DFB600AFDB4A /* WPWatingViewController.m */,
 				50980905190D2FFA0096AF42 /* WPRecognizedGuestViewController.h */,
 				50980906190D2FFA0096AF42 /* WPRecognizedGuestViewController.m */,
 				503D42251932248B004EE93D /* WPUnrecognizedGuestViewController.h */,
 				503D42261932248B004EE93D /* WPUnrecognizedGuestViewController.m */,
+				5005E24119697CE200CEAFDF /* WPSearchHostTableViewController.h */,
+				5005E24219697CE200CEAFDF /* WPSearchHostTableViewController.m */,
+				1A720DB21AFA894500FE30E6 /* WPSearchHostViewControllerOld.h */,
+				1A720DB31AFA894500FE30E6 /* WPSearchHostViewControllerOld.m */,
+				504C8F4119A9DFB600AFDB4A /* WPWatingViewController.h */,
+				504C8F4219A9DFB600AFDB4A /* WPWatingViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -556,6 +561,7 @@
 				50203BAF19A5EE7900E76213 /* TransformationMatrix.cpp in Sources */,
 				50203B9E19A5EE7900E76213 /* POPAnimatableProperty.mm in Sources */,
 				50F07370190CE5520041BA84 /* AFURLRequestSerialization.m in Sources */,
+				1A720DB41AFA894500FE30E6 /* WPSearchHostViewControllerOld.m in Sources */,
 				5098090B190D3E030096AF42 /* NSObject+Block.m in Sources */,
 				50F07372190CE5520041BA84 /* AFURLSessionManager.m in Sources */,
 				50C5108118E87DD200E93F3B /* WPAppDelegate.m in Sources */,

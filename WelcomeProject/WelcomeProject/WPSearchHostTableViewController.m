@@ -8,27 +8,37 @@
 
 #import "WPSearchHostTableViewController.h"
 #import "WPInnovaServer.h"
+#import <QuartzCore/QuartzCore.h>
+#import "WPAppDelegate.h"
 
-@interface WPSearchHostTableViewController ()<UISearchBarDelegate>
+@interface WPSearchHostTableViewController ()<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>
 @property (strong,nonatomic) NSMutableArray *filteredHostsArray;
+@property (weak, nonatomic) IBOutlet UIView *searchContinerView;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UITextField *searchTextField;
+@property (nonatomic) NSInteger row;
+@property (weak, nonatomic) IBOutlet UIButton *searchButton;
+@property (weak, nonatomic) IBOutlet UIButton *notifyButton;
 @end
 
 @implementation WPSearchHostTableViewController
 
 #pragma mark - Life cycle
-- (instancetype)initWithStyle:(UITableViewStyle)style{
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
 - (void)viewDidLoad{
     [super viewDidLoad];
     
+    self.row = -1;
+    self.notifyButton.enabled = NO;
+    
+    self.searchTextField.delegate = self;
+    [self.searchTextField addTarget:self
+                  action:@selector(textFieldDidChange:)
+        forControlEvents:UIControlEventEditingChanged];
+    
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
+    
     if (self.hosts == nil) {
-        
         WPInnovaServer *server = [[WPInnovaServer alloc]init];
         [server getHostsListWithResualBlock:^(NSArray *hosts) {
             self.hosts = hosts;
@@ -36,20 +46,41 @@
             [self.tableView reloadData];
         }];
     }
-    self.filteredHostsArray = [self.hosts mutableCopy];
 
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    self.searchContinerView.layer.borderColor = [UIColor blackColor].CGColor;
+    self.searchContinerView.layer.borderWidth = 1.0f;
 }
 
 #pragma mark - IBAction
-- (IBAction)closeButtonAction:(UIButton *)sender
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
+- (IBAction)clearSearch:(UIButton *)sender {
+    
+    self.searchButton.selected = NO;
+    self.searchTextField.text = @"";
+    self.tableView.hidden = NO;
+    self.row = -1;
+    self.notifyButton.enabled = NO;
+    self.filteredHostsArray = [self.hosts mutableCopy];
+    [self.tableView reloadData];
+}
+
+- (IBAction)notifyAction {
+    
+    if (self.row == -1){
+        return;
+    }
+    NSDictionary *hostDetails = [self.filteredHostsArray objectAtIndex:self.row];
+    
+    NSNumber* hostId = hostDetails[@"id"];
+    
+    WPAppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
+    
+    WPInnovaServer *server = [[WPInnovaServer alloc]init];
+    [server createGuestWithGuest:appDelegate.userDetails
+                          hostId:[hostId stringValue]];
+    
+    appDelegate.userDetails = nil;
+    
+    [self performSegueWithIdentifier:@"Wating" sender:self];
 }
 
 #pragma mark - Table view data source
@@ -58,6 +89,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"HostCell"];
     if ( cell == nil ) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"HostCell"];
@@ -66,7 +98,9 @@
     NSDictionary *hostDetails = [self.filteredHostsArray objectAtIndex:indexPath.row];
    
     
-    NSString* hostName = [NSString stringWithFormat:@"%@ %@", hostDetails[@"lastName"], hostDetails[@"firstName"]];
+    NSString* hostName = [NSString stringWithFormat:@"%@ %@",
+                          hostDetails[@"firstName"],
+                          hostDetails[@"lastName"]];
     cell.textLabel.text = hostName;
     
     return cell;
@@ -74,29 +108,58 @@
 
 #pragma mark - Table view delegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSDictionary *hostDetails = [self.filteredHostsArray objectAtIndex:indexPath.row];
+
+    [self.searchTextField resignFirstResponder];
     
-    NSString* hostName = [NSString stringWithFormat:@"%@ %@", hostDetails[@"lastName"], hostDetails[@"firstName"]];
-    NSNumber* hostId = hostDetails[@"id"];
+    UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
+    self.row = indexPath.row;
+    self.searchTextField.text = cell.textLabel.text;
     
-    [self.delegate searchHostTableViewController:self
-                                 selectedChanged:hostName
-                                  selectedHostId:[hostId stringValue]];
-    
-    [self dismissViewControllerAnimated:YES completion:nil];
+    self.notifyButton.enabled = YES;
+    self.tableView.hidden = YES;
 }
 
-#pragma mark - UISearchDisplayController Delegate Methods
-- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
-    if ([searchText isEqualToString:@""])
+- (NSString *)emptyIfNil:(NSString *)str{
+    
+    if (str == nil){
+        return @"";
+    }
+    return str;
+}
+
+#pragma mark - UITextFieldDelegate
+- (BOOL)textFieldDidChange:(UITextField *)textField {
+    if ([textField.text isEqualToString:@""])
     {
+        self.searchButton.selected = NO;
+        self.notifyButton.enabled = NO;
         self.filteredHostsArray = [self.hosts mutableCopy];
     }
     else
     {
-        [self filterContentForSearchText:searchText scope:nil];
+        [self filterContentForSearchText:textField.text scope:nil];
+        self.searchButton.selected = YES;
     }
     [self.tableView reloadData];
+    
+    return YES;
+}
+
+- (BOOL)textFieldShouldClear:(UITextField *)textField{
+    
+    self.searchButton.selected = NO;
+    self.notifyButton.enabled = NO;
+    self.filteredHostsArray = [self.hosts mutableCopy];
+    [self.tableView reloadData];
+    return YES;
+}
+
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
+    
+    self.row = -1;
+    self.notifyButton.enabled = NO;
+    self.tableView.hidden = NO;
+    return YES;
 }
 
 #pragma mark Content Filtering

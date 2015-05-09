@@ -9,27 +9,28 @@
 #import "WPRecognizedGuestViewController.h"
 #import "WPSearchHostTableViewController.h"
 #import "WPInnovaServer.h"
+#import "WPAppDelegate.h"
 
-@interface WPRecognizedGuestViewController ()<WPSearchHostTableViewControllerDelegate,UITextFieldDelegate>
-@property (weak, nonatomic) IBOutlet UILabel *firstNameLabel;
-@property (weak, nonatomic) IBOutlet UILabel *lastNameLabel;
-@property (weak, nonatomic) IBOutlet UILabel *emailLabel;
-@property (weak, nonatomic) IBOutlet UILabel *telephoneLabel;
-@property (weak, nonatomic) IBOutlet UITextField *selectHostsTextField;
+@interface WPRecognizedGuestViewController ()<UITextFieldDelegate,UITableViewDataSource,UITableViewDelegate>
+
+@property (weak, nonatomic) IBOutlet UILabel *welcomeLabel;
 @property (strong, nonatomic) NSArray* hosts;
 @property (weak, nonatomic) IBOutlet UIButton *notifyButton;
 @property (weak, nonatomic) IBOutlet UIImageView *userImage;
-
-
 @property (strong, nonatomic)NSString* hostId;
 @property (strong, nonatomic)NSString* guestId;
+@property (strong,nonatomic) NSMutableArray *filteredHostsArray;
+@property (weak, nonatomic) IBOutlet UIView *searchContinerView;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UITextField *searchTextField;
+@property (weak, nonatomic) IBOutlet UIButton *searchButton;
+@property (nonatomic) NSInteger row;
 
 @end
 
 @implementation WPRecognizedGuestViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
@@ -37,22 +38,44 @@
     return self;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad{
     [super viewDidLoad];
+    self.row = -1;
+    
     // Do any additional setup after loading the view.
     if (self.model)
     {
-        self.firstNameLabel.text = self.model[@"firstName"];
-        self.lastNameLabel.text  = self.model[@"lastName"];
-        self.emailLabel.text     = self.model[@"email"];
-        self.telephoneLabel.text = self.model[@"phoneNumber"];
+        NSString* firstName = self.model[@"firstName"];
+        NSString* lastName  = self.model[@"lastName"];
         
+        //self.emailLabel.text     = self.model[@"email"];
+        //self.telephoneLabel.text = self.model[@"phoneNumber"];
+        
+        self.welcomeLabel.text = [NSString stringWithFormat:@"Hi %@ %@, notify your host to welcome you",firstName, lastName];
         NSData* data = [[NSData alloc] initWithBase64EncodedString:self.model[@"picture"] options:0];
         self.userImage.image = [UIImage imageWithData:data];
         
         self.guestId = self.model[@"id"];
     }
+    self.searchTextField.delegate = self;
+    [self.searchTextField addTarget:self
+                             action:@selector(textFieldDidChange:)
+                   forControlEvents:UIControlEventEditingChanged];
+    
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
+    
+    if (self.hosts == nil) {
+        WPInnovaServer *server = [[WPInnovaServer alloc]init];
+        [server getHostsListWithResualBlock:^(NSArray *hosts) {
+            self.hosts = hosts;
+            self.filteredHostsArray = [self.hosts mutableCopy];
+            [self.tableView reloadData];
+        }];
+    }
+    
+    self.searchContinerView.layer.borderColor = [UIColor blackColor].CGColor;
+    self.searchContinerView.layer.borderWidth = 1.0f;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -63,32 +86,14 @@
     }];
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 #pragma mark - IBAction
 - (IBAction)notifyButtonAction:(UIButton *)sender
-{
-    //[MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    
+{    
     WPInnovaServer *server = [[WPInnovaServer alloc]init];
     
     [server notifyWithHostId:self.hostId guestId:self.guestId];
     
     [self performSegueWithIdentifier:@"Wating ViewController Segue" sender:self];
-}
-
-#pragma mark - UItextFieldDelegate
-- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
-{
-    if (textField == self.selectHostsTextField) {
-        [self performSegueWithIdentifier:@"SearchHostSegue" sender:self];
-        return NO;
-    }
-    return YES;
 }
 
 #pragma mark - Navigation
@@ -98,19 +103,132 @@
         
         WPSearchHostTableViewController* searchHostViewController = segue.destinationViewController;
         searchHostViewController.hosts = self.hosts;
-        searchHostViewController.delegate = self;
     }
 }
 
-#pragma mark - WPSearchHostTableViewControllerDelegate
-- (void)searchHostTableViewController:(WPSearchHostTableViewController *)sender
-                      selectedChanged:(NSString *)hostName
-                       selectedHostId:(NSString *)hostId{
-    
-    self.selectHostsTextField.text = hostName;
-    if (hostName.length > 0) {
-        self.notifyButton.enabled = YES;
+- (IBAction)notifyAction {
+
+    if (self.row == -1){
+        return;
     }
-    self.hostId = hostId;
+    NSDictionary *hostDetails = [self.filteredHostsArray objectAtIndex:self.row];
+
+    NSNumber* hostId = hostDetails[@"id"];
+
+    WPAppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
+
+    WPInnovaServer *server = [[WPInnovaServer alloc]init];
+    [server createGuestWithGuest:appDelegate.userDetails
+                          hostId:[hostId stringValue]];
+
+    appDelegate.userDetails = nil;
+
+    [self performSegueWithIdentifier:@"Wating" sender:self];
 }
+
+- (IBAction)clearSearch{
+    
+    self.searchButton.selected = NO;
+    self.searchTextField.text = @"";
+    self.tableView.hidden = NO;
+    self.row = -1;
+    self.notifyButton.enabled = NO;
+    self.filteredHostsArray = [self.hosts mutableCopy];
+    [self.tableView reloadData];
+}
+
+#pragma mark - Table view data source
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return [self.filteredHostsArray count];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"HostCell"];
+    if ( cell == nil ) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"HostCell"];
+    }
+    
+    NSDictionary *hostDetails = [self.filteredHostsArray objectAtIndex:indexPath.row];
+    
+    
+    NSString* hostName = [NSString stringWithFormat:@"%@ %@",
+                          hostDetails[@"firstName"],
+                          hostDetails[@"lastName"]];
+    cell.textLabel.text = hostName;
+    
+    return cell;
+}
+
+#pragma mark - Table view delegate
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+
+    [self.searchTextField resignFirstResponder];
+    
+    UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
+    self.row = indexPath.row;
+    self.searchTextField.text = cell.textLabel.text;
+    
+    self.notifyButton.enabled = YES;
+    self.tableView.hidden = YES;
+}
+
+- (NSString *)emptyIfNil:(NSString *)str{
+    
+    if (str == nil){
+        return @"";
+    }
+    return str;
+}
+
+#pragma mark - UITextFieldDelegate
+- (BOOL)textFieldDidChange:(UITextField *)textField {
+    if ([textField.text isEqualToString:@""])
+    {
+        self.searchButton.selected = NO;
+        self.notifyButton.enabled = NO;
+        self.filteredHostsArray = [self.hosts mutableCopy];
+    }
+    else
+    {
+        [self filterContentForSearchText:textField.text scope:nil];
+        self.searchButton.selected = YES;
+    }
+    [self.tableView reloadData];
+    
+    return YES;
+}
+
+- (BOOL)textFieldShouldClear:(UITextField *)textField{
+    
+    self.searchButton.selected = NO;
+    self.notifyButton.enabled = NO;
+    self.filteredHostsArray = [self.hosts mutableCopy];
+    [self.tableView reloadData];
+    return YES;
+}
+
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
+    
+    self.row = -1;
+    self.notifyButton.enabled = NO;
+    self.tableView.hidden = NO;
+    return YES;
+}
+
+#pragma mark Content Filtering
+-(void)filterContentForSearchText:(NSString*)searchText scope:(NSString*)scope{
+    [self.filteredHostsArray removeAllObjects];
+    self.filteredHostsArray = [[self.hosts filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NSDictionary *hostDetails, NSDictionary *bindings) {
+        
+        NSString* hostName = [NSString stringWithFormat:@"%@ %@",
+                              hostDetails[@"lastName"], hostDetails[@"firstName"]];
+        
+        NSString* nameHost = [NSString stringWithFormat:@"%@ %@",
+                              hostDetails[@"firstName"], hostDetails[@"lastName"]];
+        return [hostName rangeOfString:searchText options:NSCaseInsensitiveSearch].location != NSNotFound ||
+        [nameHost rangeOfString:searchText options:NSCaseInsensitiveSearch].location != NSNotFound ;
+    }]]mutableCopy];
+}
+
 @end

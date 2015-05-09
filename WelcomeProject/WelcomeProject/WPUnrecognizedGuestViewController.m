@@ -11,22 +11,19 @@
 #import "WPSearchHostTableViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "WPAppDelegate.h"
+#import "WPFaceDetectionViewControolerViewController.h"
 
 @interface WPUnrecognizedGuestViewController ()<UIPickerViewDelegate, UITextFieldDelegate, WPSearchHostTableViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *selectHostsTextField;
 @property (strong, nonatomic) NSArray* hosts;
-
 @property (strong, nonatomic) IBOutletCollection(UITextField) NSArray *textFieldsCollections;
 @property (weak, nonatomic)UITextField* currentTextField;
-@property (weak, nonatomic) IBOutlet UIButton *notifyButton;
-
-
+@property (weak, nonatomic) IBOutlet UIButton *nextButton;
 @property (strong, nonatomic)NSString* hostId;
-
 @property (weak, nonatomic) IBOutlet UITextField *firstNameTextField;
 @property (weak, nonatomic) IBOutlet UITextField *lastNameTextField;
 @property (weak, nonatomic) IBOutlet UITextField *emailTextField;
-@property (weak, nonatomic) IBOutlet UITextField *phoneTextField;
+@property (weak, nonatomic) IBOutlet UIImageView *guestImage;
 
 @end
 
@@ -44,16 +41,21 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.firstNameTextField.layer.sublayerTransform = CATransform3DMakeTranslation(10, 0, 0);
+    self.lastNameTextField.layer.sublayerTransform = CATransform3DMakeTranslation(10, 0, 0);
+    self.emailTextField.layer.sublayerTransform = CATransform3DMakeTranslation(10, 0, 0);
+    
     self.currentTextField = self.textFieldsCollections.firstObject;
     [self.currentTextField becomeFirstResponder];
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-//    WPInnovaServer *server = [[WPInnovaServer alloc]init];
-//    [server getHostsListWithResualBlock:^(NSArray *hosts) {
-//        self.hosts = hosts;
-//    }];
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    WPAppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
+    
+    self.guestImage.image = appDelegate.profileImage;
 }
 
 #pragma mark - Private
@@ -74,32 +76,45 @@
     [self.currentTextField resignFirstResponder];
 }
 
+- (NSString *)emptyIfNil:(NSString *)str{
+    
+    if (str == nil){
+        return @"";
+    }
+    return str;
+}
+
 - (IBAction)notifyHostButtonAction:(UIButton *)sender
 {
-    WPInnovaServer *server = [[WPInnovaServer alloc]init];
+    //WPInnovaServer *server = [[WPInnovaServer alloc]init];
     
     WPAppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
     
-    
-        
     UIImage *scaledImage = [UIImage imageWithCGImage:[appDelegate.profileImage CGImage]
                                                    scale:(appDelegate.profileImage.scale * 1.0)
                                              orientation:(UIImageOrientationRight)];
     NSString *imageBase64 = [self imageBase64String:scaledImage];
     
     
-    [server createGuestWithGuest:@{@"firstName":self.firstNameTextField.text,
-                                   @"lastName": self.lastNameTextField.text,
-                                   @"email": self.emailTextField.text,
-                                   @"phoneNumber": appDelegate.phoneNumber,
-                                   @"base64img":imageBase64
-                                   }
-                                   hostId:self.hostId];
+//    [server createGuestWithGuest:@{@"firstName":   [self emptyIfNil:self.firstNameTextField.text],
+//                                   @"lastName":    [self emptyIfNil:self.lastNameTextField.text],
+//                                   @"email":       [self emptyIfNil:self.emailTextField.text],
+//                                   @"phoneNumber": [self emptyIfNil:appDelegate.phoneNumber],
+//                                   @"base64img":imageBase64
+//                                   }
+//                                   hostId:self.hostId];
+
+    appDelegate.userDetails = @{@"firstName":   [self emptyIfNil:self.firstNameTextField.text],
+                                @"lastName":    [self emptyIfNil:self.lastNameTextField.text],
+                                @"email":       [self emptyIfNil:self.emailTextField.text],
+                                @"phoneNumber": [self emptyIfNil:appDelegate.phoneNumber],
+                                @"base64img":imageBase64
+                                };
     
-    appDelegate.phoneNumber = nil;
-    appDelegate.profileImage = nil;
+    //appDelegate.phoneNumber = nil;
+    //appDelegate.profileImage = nil;
     
-    //[self performSegueWithIdentifier:@"Wating ViewController Segue" sender:self];
+    [self performSegueWithIdentifier:@"selectHost" sender:self];
 }
 
 - (NSString *)imageBase64String:(UIImage *)image
@@ -113,6 +128,18 @@
 }
 
 #pragma mark - UItextFieldDelegate
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    
+    if (self.firstNameTextField.text.length > 0 && self.lastNameTextField.text.length > 0){
+        self.nextButton.enabled = YES;
+    }
+    else{
+        self.nextButton.enabled = NO;
+    }
+    
+    return YES;
+}
+
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     NSInteger tag = textField.tag + 1;
@@ -140,24 +167,29 @@
         [textField resignFirstResponder];
         return NO;
     }
+    
+    if (self.firstNameTextField.text.length > 0 && self.lastNameTextField.text.length > 0){
+        self.nextButton.enabled = YES;
+    }
+    else{
+        self.nextButton.enabled = NO;
+    }
 }
 
-- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
-{
-    if (textField == self.selectHostsTextField) {
-        [self.currentTextField resignFirstResponder];
-        [self performSegueWithIdentifier:@"SearchHostSegue" sender:self];
-        return NO;
-    }
-    self.currentTextField = textField;
-    return YES;
-}
+//- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+//{
+//    if (textField == self.selectHostsTextField) {
+//        [self.currentTextField resignFirstResponder];
+//        [self performSegueWithIdentifier:@"SearchHostSegue" sender:self];
+//        return NO;
+//    }
+//    self.currentTextField = textField;
+//    return YES;
+//}
 
 #pragma mark - Navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     if ([segue.identifier isEqualToString:@"SearchHostSegue"]) {
-        
         WPSearchHostTableViewController* searchHostViewController = segue.destinationViewController;
         searchHostViewController.delegate = self;
     }
@@ -170,7 +202,7 @@
     
     self.selectHostsTextField.text = hostName;
     self.hostId = hostId;
-    self.notifyButton.enabled = YES;
+    //self.notifyButton.enabled = YES;
 }
 
 @end
