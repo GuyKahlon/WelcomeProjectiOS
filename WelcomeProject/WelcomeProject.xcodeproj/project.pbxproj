@@ -190,6 +190,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1A720DB81AFE437600FE30E6 /* Guest login Controller */ = {
+			isa = PBXGroup;
+			children = (
+				50C5108518E87DD200E93F3B /* WPMainViewController.h */,
+				50C5108618E87DD200E93F3B /* WPMainViewController.m */,
+			);
+			name = "Guest login Controller";
+			sourceTree = "<group>";
+		};
 		50203B6519A5EE7900E76213 /* pop */ = {
 			isa = PBXGroup;
 			children = (
@@ -279,8 +288,7 @@
 		506A04061A2601F700CF416E /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				50C5108518E87DD200E93F3B /* WPMainViewController.h */,
-				50C5108618E87DD200E93F3B /* WPMainViewController.m */,
+				1A720DB81AFE437600FE30E6 /* Guest login Controller */,
 				50980905190D2FFA0096AF42 /* WPRecognizedGuestViewController.h */,
 				50980906190D2FFA0096AF42 /* WPRecognizedGuestViewController.m */,
 				503D42251932248B004EE93D /* WPUnrecognizedGuestViewController.h */,
@@ -344,9 +352,9 @@
 		50C5106418E87DD200E93F3B = {
 			isa = PBXGroup;
 			children = (
+				50C5107618E87DD200E93F3B /* WelcomeProject */,
 				50980908190D3D8C0096AF42 /* Categories */,
 				50F07355190CE5290041BA84 /* Third Party */,
-				50C5107618E87DD200E93F3B /* WelcomeProject */,
 				50C5106F18E87DD200E93F3B /* Frameworks */,
 				50C5106E18E87DD200E93F3B /* Products */,
 			);

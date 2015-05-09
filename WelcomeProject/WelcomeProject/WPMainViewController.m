@@ -29,6 +29,10 @@
     
     self.phoneTextField.layer.sublayerTransform = CATransform3DMakeTranslation(10, 0, 0);
     
+    [self.phoneTextField addTarget:self
+                            action:@selector(textFieldDidChange:)
+                  forControlEvents:UIControlEventEditingChanged];
+    
     [self.navigationController.navigationBar setBackgroundImage:[UIImage new]
                              forBarMetrics:UIBarMetricsDefault];
     self.navigationController.navigationBar.shadowImage = [UIImage new];
@@ -42,8 +46,7 @@
 }
 
 #pragma mark - Private methods
-- (void)moveToCamera
-{
+- (void)moveToCamera{
     WPAppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
 
     NSString* phone = self.phoneTextField.text;
@@ -62,12 +65,12 @@
     return YES;
 }
 
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+- (BOOL)textFieldDidChange:(UITextField *)textField {
     if (self.phoneTextField.text.length >= 9) {
         self.sighnInButton.enabled = YES;
     }
     else{
-       self.sighnInButton.enabled = NO;
+        self.sighnInButton.enabled = NO;
     }
     return YES;
 }

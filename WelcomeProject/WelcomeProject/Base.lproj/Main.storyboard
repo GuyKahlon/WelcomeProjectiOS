@@ -421,6 +421,7 @@
                                 <state key="normal" image="play">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <state key="highlighted" image="button_play_over"/>
                                 <connections>
                                     <action selector="buttonPressed:" destination="228-fq-PjD" eventType="touchUpInside" id="xy0-mH-m7s"/>
                                 </connections>
@@ -505,7 +506,7 @@
                                 </state>
                                 <state key="highlighted" image="nextButton"/>
                                 <connections>
-                                    <action selector="notifyHostButtonAction:" destination="lbi-0e-KSd" eventType="touchUpInside" id="Slu-x3-5QS"/>
+                                    <action selector="nextButtonAction:" destination="lbi-0e-KSd" eventType="touchUpInside" id="vXa-UB-bX0"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UaT-Yi-zuM">
@@ -751,6 +752,7 @@
         <image name="button_notify_hover" width="196" height="48"/>
         <image name="button_photo" width="103" height="103"/>
         <image name="button_photo_over" width="103" height="103"/>
+        <image name="button_play_over" width="103" height="103"/>
         <image name="button_quit" width="182" height="49"/>
         <image name="button_signin" width="181" height="48"/>
         <image name="button_signin_hover" width="181" height="48"/>
@@ -758,7 +760,7 @@
         <image name="meetingWith" width="359" height="126"/>
         <image name="nextButton" width="130" height="48"/>
         <image name="nice_to_meeet" width="449" height="56"/>
-        <image name="play" width="25" height="25"/>
+        <image name="play" width="103" height="103"/>
         <image name="search" width="30" height="31"/>
         <image name="welcome_BG" width="768" height="1024"/>
         <image name="welcome_back" width="395" height="47"/>
@@ -769,6 +771,6 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="uAy-yB-HuM"/>
+        <segue reference="Fzg-rb-mxD"/>
     </inferredMetricsTieBreakers>
 </document>

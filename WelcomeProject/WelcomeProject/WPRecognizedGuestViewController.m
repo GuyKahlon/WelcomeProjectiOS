@@ -48,9 +48,6 @@
         NSString* firstName = self.model[@"firstName"];
         NSString* lastName  = self.model[@"lastName"];
         
-        //self.emailLabel.text     = self.model[@"email"];
-        //self.telephoneLabel.text = self.model[@"phoneNumber"];
-        
         self.welcomeLabel.text = [NSString stringWithFormat:@"Hi %@ %@, notify your host to welcome you",firstName, lastName];
         NSData* data = [[NSData alloc] initWithBase64EncodedString:self.model[@"picture"] options:0];
         self.userImage.image = [UIImage imageWithData:data];
@@ -114,23 +111,29 @@
     NSDictionary *hostDetails = [self.filteredHostsArray objectAtIndex:self.row];
 
     NSNumber* hostId = hostDetails[@"id"];
-
+    NSString* guestId = self.model[@"id"];
+    
     WPAppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
 
     WPInnovaServer *server = [[WPInnovaServer alloc]init];
-    [server createGuestWithGuest:appDelegate.userDetails
-                          hostId:[hostId stringValue]];
 
+    [server notifyWithHostId:hostId guestId:guestId];
     appDelegate.userDetails = nil;
-
-    [self performSegueWithIdentifier:@"Wating" sender:self];
+    appDelegate.profileImage = nil;
+    
+    [self performSegueWithIdentifier:@"Wating ViewController Segue"
+                              sender:self];
 }
 
 - (IBAction)clearSearch{
     
     self.searchButton.selected = NO;
     self.searchTextField.text = @"";
-    self.tableView.hidden = NO;
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        self.tableView.alpha = 1.0;
+    }];
+    
     self.row = -1;
     self.notifyButton.enabled = NO;
     self.filteredHostsArray = [self.hosts mutableCopy];
@@ -168,9 +171,11 @@
     UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
     self.row = indexPath.row;
     self.searchTextField.text = cell.textLabel.text;
-    
     self.notifyButton.enabled = YES;
-    self.tableView.hidden = YES;
+    self.searchButton.selected = YES;
+    [UIView animateWithDuration:0.5 animations:^{
+        self.tableView.alpha = 0.0;
+    }];
 }
 
 - (NSString *)emptyIfNil:(NSString *)str{
@@ -212,7 +217,9 @@
     
     self.row = -1;
     self.notifyButton.enabled = NO;
-    self.tableView.hidden = NO;
+    [UIView animateWithDuration:0.5 animations:^{
+        self.tableView.alpha = 1.0;
+    }];
     return YES;
 }
 

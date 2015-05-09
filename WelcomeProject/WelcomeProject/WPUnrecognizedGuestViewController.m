@@ -29,8 +29,7 @@
 
 @implementation WPUnrecognizedGuestViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
@@ -38,9 +37,16 @@
     return self;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad{
     [super viewDidLoad];
+    
+    [self.firstNameTextField addTarget:self
+                            action:@selector(textFieldDidChange:)
+                  forControlEvents:UIControlEventEditingChanged];
+    
+    [self.lastNameTextField addTarget:self
+                            action:@selector(textFieldDidChange:)
+                  forControlEvents:UIControlEventEditingChanged];
     
     self.firstNameTextField.layer.sublayerTransform = CATransform3DMakeTranslation(10, 0, 0);
     self.lastNameTextField.layer.sublayerTransform = CATransform3DMakeTranslation(10, 0, 0);
@@ -72,21 +78,17 @@
 
 #pragma mark - IBAction
 - (IBAction)handleTapGestureRecognizer:(UITapGestureRecognizer *)sender {
-
     [self.currentTextField resignFirstResponder];
 }
 
 - (NSString *)emptyIfNil:(NSString *)str{
-    
     if (str == nil){
         return @"";
     }
     return str;
 }
 
-- (IBAction)notifyHostButtonAction:(UIButton *)sender
-{
-    //WPInnovaServer *server = [[WPInnovaServer alloc]init];
+- (IBAction)nextButtonAction:(UIButton *)sender{
     
     WPAppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
     
@@ -94,15 +96,6 @@
                                                    scale:(appDelegate.profileImage.scale * 1.0)
                                              orientation:(UIImageOrientationRight)];
     NSString *imageBase64 = [self imageBase64String:scaledImage];
-    
-    
-//    [server createGuestWithGuest:@{@"firstName":   [self emptyIfNil:self.firstNameTextField.text],
-//                                   @"lastName":    [self emptyIfNil:self.lastNameTextField.text],
-//                                   @"email":       [self emptyIfNil:self.emailTextField.text],
-//                                   @"phoneNumber": [self emptyIfNil:appDelegate.phoneNumber],
-//                                   @"base64img":imageBase64
-//                                   }
-//                                   hostId:self.hostId];
 
     appDelegate.userDetails = @{@"firstName":   [self emptyIfNil:self.firstNameTextField.text],
                                 @"lastName":    [self emptyIfNil:self.lastNameTextField.text],
@@ -110,9 +103,6 @@
                                 @"phoneNumber": [self emptyIfNil:appDelegate.phoneNumber],
                                 @"base64img":imageBase64
                                 };
-    
-    //appDelegate.phoneNumber = nil;
-    //appDelegate.profileImage = nil;
     
     [self performSegueWithIdentifier:@"selectHost" sender:self];
 }
@@ -128,9 +118,9 @@
 }
 
 #pragma mark - UItextFieldDelegate
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+- (BOOL)textFieldDidChange:(UITextField *)textField {
     
-    if (self.firstNameTextField.text.length > 0 && self.lastNameTextField.text.length > 0){
+    if (self.firstNameTextField.text.length > 1 && self.lastNameTextField.text.length > 1){
         self.nextButton.enabled = YES;
     }
     else{
@@ -140,8 +130,7 @@
     return YES;
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
-{
+- (BOOL)textFieldShouldReturn:(UITextField *)textField{
     NSInteger tag = textField.tag + 1;
     
     if (textField == self.emailTextField)
@@ -176,17 +165,6 @@
     }
 }
 
-//- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
-//{
-//    if (textField == self.selectHostsTextField) {
-//        [self.currentTextField resignFirstResponder];
-//        [self performSegueWithIdentifier:@"SearchHostSegue" sender:self];
-//        return NO;
-//    }
-//    self.currentTextField = textField;
-//    return YES;
-//}
-
 #pragma mark - Navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     if ([segue.identifier isEqualToString:@"SearchHostSegue"]) {
@@ -199,10 +177,8 @@
 - (void)searchHostTableViewController:(WPSearchHostTableViewController *)sender
                       selectedChanged:(NSString *)hostName
                        selectedHostId:(NSString *)hostId{
-    
     self.selectHostsTextField.text = hostName;
     self.hostId = hostId;
-    //self.notifyButton.enabled = YES;
 }
 
 @end

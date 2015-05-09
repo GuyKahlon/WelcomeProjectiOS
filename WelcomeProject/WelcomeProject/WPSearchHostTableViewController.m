@@ -56,7 +56,9 @@
     
     self.searchButton.selected = NO;
     self.searchTextField.text = @"";
-    self.tableView.hidden = NO;
+    [UIView animateWithDuration:0.5 animations:^{
+        self.tableView.alpha = 1.0;
+    }];
     self.row = -1;
     self.notifyButton.enabled = NO;
     self.filteredHostsArray = [self.hosts mutableCopy];
@@ -79,6 +81,7 @@
                           hostId:[hostId stringValue]];
     
     appDelegate.userDetails = nil;
+    appDelegate.profileImage = nil;
     
     [self performSegueWithIdentifier:@"Wating" sender:self];
 }
@@ -115,8 +118,12 @@
     self.row = indexPath.row;
     self.searchTextField.text = cell.textLabel.text;
     
+    self.searchButton.selected = YES;
     self.notifyButton.enabled = YES;
-    self.tableView.hidden = YES;
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        self.tableView.alpha = 0.0;
+    }];
 }
 
 - (NSString *)emptyIfNil:(NSString *)str{
@@ -158,7 +165,9 @@
     
     self.row = -1;
     self.notifyButton.enabled = NO;
-    self.tableView.hidden = NO;
+    [UIView animateWithDuration:0.5 animations:^{
+        self.tableView.alpha = 1.0;
+    }];
     return YES;
 }
 

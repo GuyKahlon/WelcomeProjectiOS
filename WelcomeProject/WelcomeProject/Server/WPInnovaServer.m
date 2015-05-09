@@ -17,7 +17,9 @@
 - (AFHTTPRequestOperationManager *)manager
 {
     if (!_manager){
-        _manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@"http://52.28.11.39:5678/"]];
+//        _manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@"http://52.28.11.39:5678/"]];
+        _manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@"http://192.168.0.101/"]];
+        
         _manager.responseSerializer = [AFHTTPResponseSerializer serializer];
         _manager.requestSerializer  = [AFJSONRequestSerializer serializer];
     }
@@ -46,7 +48,6 @@
                        }
                    }
                } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                   
                    NSLog(@"Error: %@", error);
                }];
 }
@@ -80,10 +81,14 @@
     [self.manager POST:url
             parameters:nil
                success:^(AFHTTPRequestOperation *operation, id responseObject) {                   
-           NSDictionary *jsonObject = [NSJSONSerialization JSONObjectWithData:responseObject
-                                    options:NSJSONReadingMutableContainers
-                                    error:nil];
+           
+         NSDictionary *jsonObject = [NSJSONSerialization JSONObjectWithData:responseObject
+                                                                    options:NSJSONReadingMutableContainers
+                                                                      error:nil];
            if ([jsonObject objectForKey:@"errMsg"]) {
+            
+               //Report to Google analytics
+               //NSString* errorMsg = [jsonObject objectForKey:@"errMsg"];
                [[[UIAlertView alloc]initWithTitle:@"Sorry 😳"
                                           message:@"We couldn't notify your host that you are here. \n Please contact our security guard."
                                          delegate:nil
