@@ -292,7 +292,7 @@
                                 </state>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ErV-5a-ZTe" customClass="FlatButton">
-                                <rect key="frame" x="492" y="859" width="196" height="49"/>
+                                <rect key="frame" x="491" y="457" width="196" height="49"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <state key="normal" image="button_notify">
@@ -600,6 +600,15 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="welcome_BG" translatesAutoresizingMaskIntoConstraints="NO" id="qWa-Ud-1bP">
                                 <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B3A-QP-3kE">
+                                <rect key="frame" x="465" y="430" width="251" height="49"/>
+                                <state key="normal" image="button_notify">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="notifyAction" destination="5tF-PN-GmW" eventType="touchUpInside" id="tgJ-ke-TcI"/>
+                                </connections>
+                            </button>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3qM-vU-RW6">
                                 <rect key="frame" x="80" y="256" width="609" height="74"/>
                                 <subviews>
@@ -634,15 +643,6 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B3A-QP-3kE">
-                                <rect key="frame" x="465" y="835" width="251" height="49"/>
-                                <state key="normal" image="button_notify">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="notifyAction" destination="5tF-PN-GmW" eventType="touchUpInside" id="tgJ-ke-TcI"/>
-                                </connections>
-                            </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="meetingWith" translatesAutoresizingMaskIntoConstraints="NO" id="0hw-HW-sYs">
                                 <rect key="frame" x="231" y="91" width="307" height="126"/>
                             </imageView>
@@ -771,6 +771,6 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="Fzg-rb-mxD"/>
+        <segue reference="uAy-yB-HuM"/>
     </inferredMetricsTieBreakers>
 </document>

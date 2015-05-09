@@ -13,8 +13,7 @@
 #import "WPAppDelegate.h"
 #import "WPFaceDetectionViewControolerViewController.h"
 
-@interface WPUnrecognizedGuestViewController ()<UIPickerViewDelegate, UITextFieldDelegate, WPSearchHostTableViewControllerDelegate>
-@property (weak, nonatomic) IBOutlet UITextField *selectHostsTextField;
+@interface WPUnrecognizedGuestViewController ()<UIPickerViewDelegate, UITextFieldDelegate>
 @property (strong, nonatomic) NSArray* hosts;
 @property (strong, nonatomic) IBOutletCollection(UITextField) NSArray *textFieldsCollections;
 @property (weak, nonatomic)UITextField* currentTextField;
@@ -24,7 +23,6 @@
 @property (weak, nonatomic) IBOutlet UITextField *lastNameTextField;
 @property (weak, nonatomic) IBOutlet UITextField *emailTextField;
 @property (weak, nonatomic) IBOutlet UIImageView *guestImage;
-
 @end
 
 @implementation WPUnrecognizedGuestViewController
@@ -65,8 +63,7 @@
 }
 
 #pragma mark - Private
--(BOOL) IsValidEmail:(NSString *)emailString Strict:(BOOL)strictFilter
-{
+-(BOOL) IsValidEmail:(NSString *)emailString Strict:(BOOL)strictFilter{
     NSString *stricterFilterString = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
     NSString *laxString = @".+@.+\\.[A-Za-z]{2}[A-Za-z]*";
     
@@ -88,13 +85,31 @@
     return str;
 }
 
+- (UIImage *)compressForUpload:(UIImage *)original scale:(CGFloat)scale
+{
+    // Calculate new size given scale factor.
+    CGSize originalSize = original.size;
+    CGSize newSize = CGSizeMake(originalSize.width * scale, originalSize.height * scale);
+    
+    // Scale the original image to match the new size.
+    UIGraphicsBeginImageContext(newSize);
+    [original drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
+    UIImage* compressedImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return compressedImage;
+}
+
 - (IBAction)nextButtonAction:(UIButton *)sender{
     
     WPAppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
+
+    UIImage* comImg = [self compressForUpload:appDelegate.profileImage scale:0.25];
     
-    UIImage *scaledImage = [UIImage imageWithCGImage:[appDelegate.profileImage CGImage]
-                                                   scale:(appDelegate.profileImage.scale * 1.0)
-                                             orientation:(UIImageOrientationRight)];
+    UIImage *scaledImage = [UIImage imageWithCGImage:[comImg CGImage]
+                                               scale:(comImg.scale * 1.0)
+                                         orientation:(UIImageOrientationRight)];
+    
     NSString *imageBase64 = [self imageBase64String:scaledImage];
 
     appDelegate.userDetails = @{@"firstName":   [self emptyIfNil:self.firstNameTextField.text],
@@ -163,22 +178,6 @@
     else{
         self.nextButton.enabled = NO;
     }
-}
-
-#pragma mark - Navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
-    if ([segue.identifier isEqualToString:@"SearchHostSegue"]) {
-        WPSearchHostTableViewController* searchHostViewController = segue.destinationViewController;
-        searchHostViewController.delegate = self;
-    }
-}
-
-#pragma mark - WPSearchHostTableViewControllerDelegate
-- (void)searchHostTableViewController:(WPSearchHostTableViewController *)sender
-                      selectedChanged:(NSString *)hostName
-                       selectedHostId:(NSString *)hostId{
-    self.selectHostsTextField.text = hostName;
-    self.hostId = hostId;
 }
 
 @end

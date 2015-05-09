@@ -17,7 +17,6 @@
 - (AFHTTPRequestOperationManager *)manager
 {
     if (!_manager){
-//        _manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@"http://52.28.11.39:5678/"]];
         _manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@"http://192.168.0.101/"]];
         
         _manager.responseSerializer = [AFHTTPResponseSerializer serializer];
