@@ -146,38 +146,14 @@
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{
-    NSInteger tag = textField.tag + 1;
-    
-    if (textField == self.emailTextField)
-    {
-        if ([self IsValidEmail:textField.text Strict:YES] == NO) {
-            textField.layer.borderColor = [[UIColor redColor]CGColor];
-            textField.layer.borderWidth= 1.0f;
-        }
-        else {
-            [[self.emailTextField layer] setBorderColor:nil];
-            textField.layer.borderWidth= 0.0f;
-        }
+    if (textField == self.firstNameTextField && textField.text.length > 0){
+        [self.lastNameTextField becomeFirstResponder];
+    }else if (textField == self.lastNameTextField && textField.text.length > 0){
+        [self.emailTextField becomeFirstResponder];
+    }else if(textField == self.emailTextField){
+        [self.emailTextField resignFirstResponder];
     }
-    
-    if (tag < self.textFieldsCollections.count)
-    {
-        UITextField* currentTextField = self.textFieldsCollections[tag++];
-        [currentTextField becomeFirstResponder];
-        return YES;
-    }
-    else
-    {
-        [textField resignFirstResponder];
-        return NO;
-    }
-    
-    if (self.firstNameTextField.text.length > 0 && self.lastNameTextField.text.length > 0){
-        self.nextButton.enabled = YES;
-    }
-    else{
-        self.nextButton.enabled = NO;
-    }
+    return YES;
 }
 
 @end
