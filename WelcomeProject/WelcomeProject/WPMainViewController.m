@@ -41,8 +41,13 @@
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    
     [self.phoneTextField becomeFirstResponder];
     self.guestInfo = nil;
+    
+    WPAppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
+    appDelegate.userDetails = nil;
+    appDelegate.profileImage = nil;
 }
 
 #pragma mark - Private methods
